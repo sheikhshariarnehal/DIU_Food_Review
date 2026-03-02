@@ -4,6 +4,7 @@ import { AnalyticsCard } from "@/components/AnalyticsCard";
 import { StarRating } from "@/components/StarRating";
 import { Store, Star, MessageSquare, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import CreateShopForm from "./CreateShopForm";
 
 export default async function OwnerDashboard() {
   const supabase = await createClient();
@@ -23,14 +24,17 @@ export default async function OwnerDashboard() {
 
   if (!shop) {
     return (
-      <div className="max-w-3xl mx-auto text-center py-16">
-        <Store className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
-          No Shop Assigned
-        </h2>
-        <p className="text-gray-500 text-sm">
-          Your shop hasn&apos;t been set up by the admin yet. Please contact the admin.
-        </p>
+      <div className="max-w-2xl mx-auto py-8">
+        <div className="text-center mb-8">
+          <Store className="w-12 h-12 text-green-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Create Your Shop
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Set up your shop to start adding menu items and receiving reviews.
+          </p>
+        </div>
+        <CreateShopForm />
       </div>
     );
   }

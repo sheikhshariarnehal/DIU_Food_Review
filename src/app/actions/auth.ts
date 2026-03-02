@@ -78,7 +78,14 @@ export async function signup(formData: FormData) {
     return { success: true, pending: true };
   }
 
-  return { success: true, pending: false };
+  // Auto-login the student immediately after signup
+  const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+  if (loginError) {
+    // Signup succeeded but login failed — fall back to success screen
+    return { success: true, pending: false };
+  }
+
+  return { success: true, pending: false, redirect: "/dashboard" };
 }
 
 export async function signInWithGoogle() {

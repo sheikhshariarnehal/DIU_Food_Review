@@ -21,9 +21,13 @@ export default function SignupPage() {
       setError(result.error);
       setLoading(false);
     } else if (result?.success) {
-      setSuccess(true);
-      setIsPending(result.pending ?? false);
-      setLoading(false);
+      if (result.redirect) {
+        window.location.href = result.redirect;
+      } else {
+        setSuccess(true);
+        setIsPending(result.pending ?? false);
+        setLoading(false);
+      }
     }
   }
 
@@ -35,11 +39,11 @@ export default function SignupPage() {
             <h2 className="text-xl font-semibold text-green-800 mb-2">
               {isPending ? "Registration Submitted!" : "Account Created!"}
             </h2>
-            <p className="text-green-700 text-sm">
-              {isPending
-                ? "Your shop owner account is pending approval by the admin. You will be able to access your dashboard once approved."
-                : "Please check your email for a verification link to complete your registration."}
-            </p>
+            {isPending && (
+              <p className="text-green-700 text-sm">
+                Your shop owner account is pending approval by the admin. You will be able to access your dashboard once approved.
+              </p>
+            )}
           </div>
           <Link
             href="/login"

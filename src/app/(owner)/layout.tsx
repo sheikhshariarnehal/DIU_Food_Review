@@ -65,6 +65,7 @@ export default async function OwnerLayout({
 
   const navItems = [
     { href: "/owner/dashboard", label: "Dashboard", icon: "LayoutDashboard" as const },
+    { href: "/owner/shop", label: "My Shop", icon: "Store" as const },
     { href: "/owner/menu", label: "Menu", icon: "UtensilsCrossed" as const },
     { href: "/owner/reviews", label: "Reviews", icon: "MessageSquare" as const },
   ];
