@@ -39,7 +39,7 @@ export default async function MyReviewsPage() {
             You haven&apos;t written any reviews yet.
           </p>
           <Link
-            href="/dashboard"
+            href="/shops"
             className="inline-block mt-3 text-sm font-medium text-green-600 hover:text-green-700"
           >
             Browse shops to leave a review →

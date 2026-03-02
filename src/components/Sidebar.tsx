@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "@/app/actions/auth";
 import type { Profile, UserRole } from "@/lib/types/database";
 import {
   LayoutDashboard,
@@ -93,15 +92,14 @@ export function Sidebar({ navItems, profile, role }: SidebarProps) {
             <p className="text-xs text-gray-500 truncate">{profile.email}</p>
           </div>
         </div>
-        <form action={signOut}>
-          <button
-            type="submit"
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
-        </form>
+        <button
+          type="button"
+          onClick={() => { window.location.href = "/api/signout"; }}
+          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+        >
+          <LogOut className="w-4 h-4" />
+          Sign Out
+        </button>
       </div>
     </aside>
   );

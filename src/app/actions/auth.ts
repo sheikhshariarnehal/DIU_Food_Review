@@ -45,7 +45,7 @@ export async function login(formData: FormData) {
     }
   }
 
-  return { redirect: "/dashboard" };
+  return { redirect: "/shops" };
 }
 
 export async function signup(formData: FormData) {
@@ -85,7 +85,7 @@ export async function signup(formData: FormData) {
     return { success: true, pending: false };
   }
 
-  return { success: true, pending: false, redirect: "/dashboard" };
+  return { success: true, pending: false, redirect: "/shops" };
 }
 
 export async function signInWithGoogle() {

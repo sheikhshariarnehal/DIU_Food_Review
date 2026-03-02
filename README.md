@@ -50,7 +50,7 @@ Use these pre-seeded accounts to test all three roles without signing up.
 |----------|------------------------------|
 | Email    | `teststudent@diu.edu.bd`     |
 | Password | `Test@12345`                 |
-| Redirects to | `/dashboard`             |
+| Redirects to | `/shops`                 |
 
 **What you can test:**
 - Browse all active shops and their menus
@@ -117,6 +117,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 | Route | Role Required |
 |-------|--------------|
-| `/dashboard`, `/leaderboard`, `/my-reviews`, `/shops/*` | Any authenticated user |
+| `/shops`, `/leaderboard`, `/my-reviews`, `/shops/*` | Any authenticated user |
 | `/owner/*` | `shop_owner` with `active` status |
 | `/admin/*` | `super_admin` |

@@ -42,6 +42,11 @@ export async function updateSession(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith("/auth/")
   );
 
+  // API routes that handle their own auth — bypass middleware protection
+  if (pathname.startsWith("/api/")) {
+    return supabaseResponse;
+  }
+
   // Helper: redirect while preserving refreshed session cookies
   // This is critical — a plain NextResponse.redirect() discards cookies
   // refreshed by supabase.auth.getUser(), breaking the session.
@@ -73,9 +78,9 @@ export async function updateSession(request: NextRequest) {
     const role = profile?.role;
     const status = profile?.status;
 
-    // Redirect authenticated users away from auth pages.
+    // Redirect authenticated users away from auth pages and the landing page.
     // Guard with `profile` so we don't loop when the DB trigger is delayed.
-    if (isPublicRoute && pathname !== "/" && profile) {
+    if (isPublicRoute && profile) {
       if (role === "super_admin") {
         return redirectWithCookies("/admin/dashboard");
       } else if (role === "shop_owner" && status === "active") {
@@ -83,18 +88,18 @@ export async function updateSession(request: NextRequest) {
       } else if (role === "shop_owner" && status === "pending") {
         return redirectWithCookies("/owner/pending");
       } else {
-        return redirectWithCookies("/dashboard");
+        return redirectWithCookies("/shops");
       }
     }
 
     // Role-based route protection
     if (pathname.startsWith("/admin") && role !== "super_admin") {
-      return redirectWithCookies("/dashboard");
+      return redirectWithCookies("/shops");
     }
 
     if (pathname.startsWith("/owner")) {
       if (role !== "shop_owner") {
-        return redirectWithCookies("/dashboard");
+        return redirectWithCookies("/shops");
       }
       if (status === "pending" && !pathname.startsWith("/owner/pending")) {
         return redirectWithCookies("/owner/pending");

@@ -45,7 +45,7 @@ export default async function StudentLayout({
   }
 
   const navItems = [
-    { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard" as const },
+    { href: "/shops", label: "Shops", icon: "Store" as const },
     { href: "/leaderboard", label: "Leaderboard", icon: "Trophy" as const },
     { href: "/my-reviews", label: "My Reviews", icon: "MessageSquare" as const },
   ];

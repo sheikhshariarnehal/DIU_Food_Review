@@ -51,7 +51,7 @@ export async function submitReview(shopId: string, rating: number, body: string)
 
   revalidatePath(`/shops/${shopId}`);
   revalidatePath("/leaderboard");
-  revalidatePath("/dashboard");
+  revalidatePath("/shops");
 
   return { success: true };
 }
