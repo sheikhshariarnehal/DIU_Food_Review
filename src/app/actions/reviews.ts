@@ -56,6 +56,54 @@ export async function submitReview(shopId: string, rating: number, body: string)
   return { success: true };
 }
 
+export async function updateReview(reviewId: string, rating: number, body: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "You must be logged in to update a review." };
+  }
+
+  if (rating < 1 || rating > 5) {
+    return { error: "Rating must be between 1 and 5." };
+  }
+
+  if (!body.trim()) {
+    return { error: "Review body cannot be empty." };
+  }
+
+  // Fetch shop_id for revalidation
+  const { data: existing } = await supabase
+    .from("reviews")
+    .select("shop_id, user_id")
+    .eq("id", reviewId)
+    .single();
+
+  if (!existing || existing.user_id !== user.id) {
+    return { error: "Review not found or you don't have permission to edit it." };
+  }
+
+  const { error } = await supabase
+    .from("reviews")
+    .update({ rating, body: body.trim() })
+    .eq("id", reviewId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return { error: "Failed to update review. Please try again." };
+  }
+
+  revalidatePath(`/shops/${existing.shop_id}`);
+  revalidatePath("/leaderboard");
+  revalidatePath("/shops");
+  revalidatePath("/my-reviews");
+
+  return { success: true };
+}
+
 export async function submitReply(reviewId: string, body: string) {
   const supabase = await createClient();
 

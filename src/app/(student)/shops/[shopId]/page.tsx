@@ -81,16 +81,15 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let hasExistingReview = false;
+  let existingReview: { id: string; rating: number; body: string } | null = null;
   if (user) {
-    const { data: existingReview } = await supabase
+    const { data } = await supabase
       .from("reviews")
-      .select("id")
+      .select("id, rating, body")
       .eq("shop_id", shopId)
       .eq("user_id", user.id)
       .maybeSingle();
-
-    hasExistingReview = !!existingReview;
+    existingReview = data ?? null;
   }
 
   // Check if user is a student (only students can review)
@@ -180,7 +179,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
       {/* Review Form (students only) */}
       {isStudent && (
         <section>
-          <ReviewForm shopId={shopId} hasExistingReview={hasExistingReview} />
+          <ReviewForm shopId={shopId} existingReview={existingReview} />
         </section>
       )}
 
