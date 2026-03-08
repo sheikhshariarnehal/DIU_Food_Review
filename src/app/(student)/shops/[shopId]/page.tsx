@@ -5,7 +5,7 @@ import { StarRating } from "@/components/StarRating";
 import { ReviewCard } from "@/components/ReviewCard";
 import { ReviewForm } from "@/components/ReviewForm";
 import { MenuItemCard } from "@/components/MenuItemCard";
-import { MapPin } from "lucide-react";
+import { Store, MessageSquare, UtensilsCrossed } from "lucide-react";
 import type { Metadata } from "next";
 import type { ReviewWithProfile } from "@/lib/types/database";
 
@@ -103,39 +103,48 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
     isStudent = profile?.role === "student";
   }
 
+  const activeMenuItems = menuItems?.filter((i) => i.status === "active") ?? [];
+
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="w-full space-y-5">
       {/* Shop Header */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="relative w-full h-48 sm:h-64 bg-gray-100">
+      <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 sm:h-64">
           {shop.image_url ? (
             <Image
               src={shop.image_url}
               alt={shop.name}
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 896px"
+              sizes="(max-width: 1024px) 100vw, 100%"
               priority
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <MapPin className="w-16 h-16 text-gray-300" />
+            <div className="flex h-full w-full items-center justify-center">
+              <Store className="h-16 w-16 text-gray-300" />
             </div>
           )}
         </div>
         <div className="p-5 sm:p-6">
-          <h1 className="text-2xl font-bold text-gray-900">{shop.name}</h1>
+          <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">{shop.name}</h1>
           {shop.description && (
-            <p className="text-gray-600 mt-2">{shop.description}</p>
+            <p className="mt-2 text-sm text-gray-500">{shop.description}</p>
           )}
-          <div className="flex items-center gap-3 mt-4">
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <StarRating rating={Math.round(avgRating)} size="md" />
-            <span className="text-lg font-semibold text-gray-800">
-              {avgRating.toFixed(1)}
+            <span className="text-lg font-bold text-gray-900">
+              {avgRating > 0 ? avgRating.toFixed(1) : "\u2014"}
             </span>
-            <span className="text-sm text-gray-500">
-              ({reviewCount} {reviewCount === 1 ? "review" : "reviews"})
+            <span className="flex items-center gap-1 text-sm text-gray-400">
+              <MessageSquare className="h-3.5 w-3.5" />
+              {reviewCount} {reviewCount === 1 ? "review" : "reviews"}
             </span>
+            {activeMenuItems.length > 0 && (
+              <span className="flex items-center gap-1 text-sm text-gray-400">
+                <UtensilsCrossed className="h-3.5 w-3.5" />
+                {activeMenuItems.length} items
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -167,8 +176,11 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
       {/* Menu Items */}
       {menuItems && menuItems.length > 0 && (
         <section>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Menu</h2>
-          <div className="space-y-3">
+          <h2 className="mb-3 text-sm font-bold text-gray-900">
+            Menu
+            <span className="ml-1.5 text-gray-400 font-normal">({menuItems.length})</span>
+          </h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {menuItems.map((item) => (
               <MenuItemCard key={item.id} item={item} />
             ))}
@@ -185,18 +197,23 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
 
       {/* Reviews */}
       <section>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Reviews ({reviewCount})
+        <h2 className="mb-3 text-sm font-bold text-gray-900">
+          Reviews
+          <span className="ml-1.5 text-gray-400 font-normal">({reviewCount})</span>
         </h2>
         {reviews && reviews.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {(reviews as unknown as ReviewWithProfile[]).map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-            <p className="text-sm text-gray-500">No reviews yet. Be the first!</p>
+          <div className="rounded-2xl border border-gray-100 bg-white p-12 text-center shadow-sm">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
+              <MessageSquare className="h-6 w-6 text-gray-300" />
+            </div>
+            <p className="text-sm font-medium text-gray-900">No reviews yet</p>
+            <p className="mt-1 text-xs text-gray-400">Be the first to share your experience!</p>
           </div>
         )}
       </section>
