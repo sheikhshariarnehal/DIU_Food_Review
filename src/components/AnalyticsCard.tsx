@@ -9,6 +9,7 @@ interface AnalyticsCardProps {
     value: number;
     isPositive: boolean;
   };
+  accent?: string;
 }
 
 export function AnalyticsCard({
@@ -17,29 +18,33 @@ export function AnalyticsCard({
   description,
   icon: Icon,
   trend,
+  accent = "bg-gray-50 text-gray-500",
 }: AnalyticsCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
+    <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-md">
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-500 font-medium">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+        <div className="space-y-1">
+          <p className="text-xs font-medium tracking-wide text-gray-500 uppercase">
+            {title}
+          </p>
+          <p className="text-2xl font-bold tracking-tight text-gray-900">{value}</p>
           {description && (
-            <p className="text-xs text-gray-400 mt-0.5">{description}</p>
+            <p className="text-xs text-gray-400">{description}</p>
           )}
           {trend && (
             <p
-              className={`text-xs font-medium mt-1 ${
-                trend.isPositive ? "text-green-600" : "text-red-600"
+              className={`text-xs font-semibold ${
+                trend.isPositive ? "text-emerald-600" : "text-red-600"
               }`}
             >
-              {trend.isPositive ? "+" : ""}
-              {trend.value}% from last month
+              {trend.isPositive ? "↑" : "↓"} {Math.abs(trend.value)}%
             </p>
           )}
         </div>
-        <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center">
-          <Icon className="w-6 h-6 text-green-600" />
+        <div
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${accent}`}
+        >
+          <Icon className="h-5 w-5" />
         </div>
       </div>
     </div>

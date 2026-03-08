@@ -22,17 +22,18 @@ export default async function OwnerShopPage() {
 
   if (!shop) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-16">
-        <Store className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
-          No Shop Yet
-        </h2>
-        <p className="text-gray-500 text-sm mb-6">
-          You haven&apos;t created your shop yet. Go to the dashboard to set up your shop.
+      <div className="mx-auto max-w-2xl py-16 text-center">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
+          <Store className="h-6 w-6 text-gray-300" />
+        </div>
+        <h2 className="text-lg font-bold text-gray-900">No Shop Yet</h2>
+        <p className="mt-1 text-sm text-gray-500">
+          You haven&apos;t created your shop yet. Go to the dashboard to set up
+          your shop.
         </p>
         <Link
           href="/owner/dashboard"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+          className="mt-5 inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
         >
           Go to Dashboard
         </Link>

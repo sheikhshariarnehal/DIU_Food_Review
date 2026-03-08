@@ -42,35 +42,31 @@ function PodiumCard({
       badgeBg: string;
       icon: React.ReactNode;
       height: string;
-      shadow: string;
     }
   > = {
     1: {
-      gradient: "from-yellow-50 via-amber-50 to-yellow-100",
-      ring: "ring-yellow-400",
-      badge: "text-yellow-700",
-      badgeBg: "bg-yellow-100",
-      icon: <Crown className="w-5 h-5 text-yellow-500" />,
+      gradient: "from-amber-50/80 to-yellow-50",
+      ring: "ring-amber-300",
+      badge: "text-amber-700",
+      badgeBg: "bg-amber-50",
+      icon: <Crown className="h-4 w-4 text-amber-500" />,
       height: "min-h-[260px]",
-      shadow: "shadow-lg shadow-yellow-200/50",
     },
     2: {
-      gradient: "from-slate-50 via-gray-50 to-slate-100",
-      ring: "ring-slate-300",
-      badge: "text-slate-600",
-      badgeBg: "bg-slate-100",
-      icon: <Medal className="w-5 h-5 text-slate-400" />,
+      gradient: "from-gray-50 to-slate-50",
+      ring: "ring-gray-300",
+      badge: "text-gray-600",
+      badgeBg: "bg-gray-100",
+      icon: <Medal className="h-4 w-4 text-gray-400" />,
       height: "min-h-[240px]",
-      shadow: "shadow-md shadow-slate-200/50",
     },
     3: {
-      gradient: "from-orange-50 via-amber-50 to-orange-100",
-      ring: "ring-orange-300",
+      gradient: "from-orange-50/80 to-amber-50",
+      ring: "ring-orange-200",
       badge: "text-orange-700",
-      badgeBg: "bg-orange-100",
-      icon: <Award className="w-5 h-5 text-orange-400" />,
+      badgeBg: "bg-orange-50",
+      icon: <Award className="h-4 w-4 text-orange-400" />,
       height: "min-h-[220px]",
-      shadow: "shadow-md shadow-orange-200/50",
     },
   };
 
@@ -80,14 +76,11 @@ function PodiumCard({
   return (
     <Link href={`/shops/${entry.shop_id}`} className="group block">
       <div
-        className={`relative bg-gradient-to-b ${c.gradient} rounded-2xl border border-gray-200/60 ${c.shadow}
-          p-5 flex flex-col items-center justify-center text-center transition-all
-          duration-300 hover:scale-[1.03] hover:shadow-xl ${c.height}`}
+        className={`relative flex flex-col items-center justify-center rounded-2xl border border-gray-100 bg-gradient-to-b ${c.gradient} p-5 text-center shadow-sm transition-all duration-300 hover:shadow-md ${c.height}`}
       >
         {/* Rank badge */}
         <div
-          className={`absolute -top-3 left-1/2 -translate-x-1/2 ${c.badgeBg} ${c.badge}
-            px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 ring-2 ring-white`}
+          className={`absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full ${c.badgeBg} ${c.badge} px-3 py-1 text-xs font-bold ring-2 ring-white`}
         >
           {c.icon}
           {ordinals[rank]}
@@ -95,8 +88,7 @@ function PodiumCard({
 
         {/* Shop image */}
         <div
-          className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-full ring-4 ${c.ring}
-            overflow-hidden bg-white mt-4 mb-3 shrink-0`}
+          className={`relative mb-3 mt-4 h-16 w-16 shrink-0 overflow-hidden rounded-full ring-4 ${c.ring} bg-white shadow-sm sm:h-20 sm:w-20`}
         >
           {entry.shop_image_url ? (
             <Image
@@ -107,27 +99,27 @@ function PodiumCard({
               sizes="80px"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50">
-              <Store className="w-7 h-7 text-gray-300" />
+            <div className="flex h-full w-full items-center justify-center bg-gray-50">
+              <Store className="h-7 w-7 text-gray-300" />
             </div>
           )}
         </div>
 
         {/* Shop name */}
-        <h3 className="font-bold text-gray-900 text-sm sm:text-base truncate max-w-full group-hover:text-green-600 transition-colors">
+        <h3 className="max-w-full truncate text-sm font-bold text-gray-900 transition-colors group-hover:text-emerald-600 sm:text-base">
           {entry.shop_name}
         </h3>
 
         {/* Rating */}
-        <div className="flex items-center gap-1.5 mt-2">
-          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-          <span className="font-bold text-gray-800 text-lg">
+        <div className="mt-2 flex items-center gap-1.5">
+          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+          <span className="text-lg font-bold text-gray-900">
             {entry.avg_rating.toFixed(1)}
           </span>
         </div>
 
         {/* Review count */}
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="mt-1 text-xs text-gray-400">
           {entry.review_count} {entry.review_count === 1 ? "review" : "reviews"}
         </p>
       </div>
@@ -147,17 +139,20 @@ function StatsBar({ entries }: { entries: LeaderboardEntry[] }) {
     {
       label: "Ranked Shops",
       value: entries.length,
-      icon: <Store className="w-4 h-4 text-green-500" />,
+      iconBg: "bg-emerald-50 text-emerald-600",
+      icon: <Store className="h-4 w-4" />,
     },
     {
       label: "Total Reviews",
       value: totalReviews.toLocaleString(),
-      icon: <MessageSquare className="w-4 h-4 text-blue-500" />,
+      iconBg: "bg-blue-50 text-blue-600",
+      icon: <MessageSquare className="h-4 w-4" />,
     },
     {
       label: "Avg Rating",
       value: avgRating.toFixed(1),
-      icon: <TrendingUp className="w-4 h-4 text-amber-500" />,
+      iconBg: "bg-amber-50 text-amber-600",
+      icon: <TrendingUp className="h-4 w-4" />,
     },
   ];
 
@@ -166,15 +161,19 @@ function StatsBar({ entries }: { entries: LeaderboardEntry[] }) {
       {stats.map((s) => (
         <div
           key={s.label}
-          className="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 text-center"
+          className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4"
         >
-          <div className="flex items-center justify-center gap-1.5 mb-1">
-            {s.icon}
-            <span className="text-lg sm:text-xl font-bold text-gray-800">
+          <div className="flex items-center justify-center gap-2">
+            <div
+              className={`flex h-8 w-8 items-center justify-center rounded-lg ${s.iconBg}`}
+            >
+              {s.icon}
+            </div>
+            <span className="text-lg font-bold text-gray-900 sm:text-xl">
               {s.value}
             </span>
           </div>
-          <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wider">
+          <p className="mt-1 text-center text-[10px] font-medium uppercase tracking-wider text-gray-400 sm:text-xs">
             {s.label}
           </p>
         </div>
@@ -234,34 +233,35 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
   /* ---- Empty state ---- */
   if (entries.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center">
-            <Trophy className="w-5 h-5 text-yellow-500" />
+      <div className="w-full">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50">
+            <Trophy className="h-5 w-5 text-amber-500" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Leaderboard</h1>
-            <p className="text-sm text-gray-500">Shop rankings by customer ratings</p>
+            <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
+              Leaderboard
+            </h1>
+            <p className="text-sm text-gray-500">
+              Shop rankings by customer ratings
+            </p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
-            <Trophy className="w-8 h-8 text-gray-300" />
+        <div className="rounded-2xl border border-gray-100 bg-white p-12 text-center shadow-sm">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-50">
+            <Trophy className="h-7 w-7 text-gray-300" />
           </div>
-          <h3 className="font-semibold text-gray-700 mb-1">
-            No rankings yet
-          </h3>
-          <p className="text-sm text-gray-400 max-w-sm mx-auto">
+          <h3 className="font-bold text-gray-900">No rankings yet</h3>
+          <p className="mx-auto mt-1 max-w-sm text-sm text-gray-500">
             Shops need at least 5 reviews to appear on the leaderboard. Start
             reviewing your favorite shops!
           </p>
           <Link
             href="/shops"
-            className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 bg-green-600 text-white text-sm
-              font-medium rounded-xl hover:bg-green-700 transition-colors"
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
           >
-            <Store className="w-4 h-4" /> Browse Shops
+            <Store className="h-4 w-4" /> Browse Shops
           </Link>
         </div>
       </div>
@@ -269,15 +269,17 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center shadow-md shadow-yellow-200/50">
-            <Trophy className="w-5 h-5 text-white" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm">
+            <Trophy className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Leaderboard</h1>
+            <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
+              Leaderboard
+            </h1>
             <p className="text-sm text-gray-500">
               Top rated shops with 5+ reviews
             </p>
@@ -285,16 +287,14 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
         </div>
 
         {/* Search */}
-        <div className="relative max-w-xs w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <div className="relative w-full max-w-xs">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search shops..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm
-              text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2
-              focus:ring-green-500/20 focus:border-green-500 transition-all"
+            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-all focus:border-gray-300 focus:ring-1 focus:ring-gray-300"
           />
         </div>
       </div>
@@ -304,7 +304,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
 
       {/* Podium — only when default rank order with no search */}
       {showPodium && top3.length >= 3 && (
-        <div className="grid grid-cols-3 gap-3 sm:gap-4 items-end">
+        <div className="grid grid-cols-3 items-end gap-3 sm:gap-4">
           {/* 2nd place on the left */}
           <div className="pt-6">
             <PodiumCard entry={top3[1]} rank={2} />
@@ -321,13 +321,13 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
       )}
 
       {/* Full rankings table */}
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
         {/* Table header with sort controls */}
-        <div className="px-4 sm:px-5 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/60">
-          <h2 className="text-sm font-semibold text-gray-700">
+        <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/60 px-4 py-3 sm:px-5">
+          <h2 className="text-sm font-bold text-gray-900">
             Full Rankings
             {search.trim() && (
-              <span className="ml-2 text-gray-400 font-normal">
+              <span className="ml-2 font-normal text-gray-400">
                 — {filtered.length} result{filtered.length !== 1 ? "s" : ""}
               </span>
             )}
@@ -356,7 +356,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
 
         {filtered.length === 0 ? (
           <div className="px-4 py-12 text-center">
-            <Search className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+            <Search className="mx-auto mb-2 h-8 w-8 text-gray-300" />
             <p className="text-sm text-gray-500">
               No shops match &quot;{search}&quot;
             </p>
@@ -367,24 +367,23 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
             <div className="hidden sm:block">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider w-16">
+                  <tr className="border-b border-gray-50">
+                    <th className="w-16 px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       #
                     </th>
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                    <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Shop
                     </th>
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider w-44">
+                    <th className="w-44 px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Rating
                     </th>
-                    <th className="px-5 py-3 text-right text-[11px] font-semibold text-gray-400 uppercase tracking-wider w-28">
+                    <th className="w-28 px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">
                       Reviews
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {filtered.map((entry, index) => {
-                    // For rank numbers: in default rank mode use the original entries index
                     const rank =
                       sortField === "rank" && sortDir === "asc"
                         ? entries.indexOf(entry) + 1
@@ -392,7 +391,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                     return (
                       <tr
                         key={entry.shop_id}
-                        className="group hover:bg-green-50/40 transition-colors"
+                        className="group transition-colors hover:bg-emerald-50/40"
                       >
                         <td className="px-5 py-3.5">
                           <RankBadge rank={rank} />
@@ -402,7 +401,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                             href={`/shops/${entry.shop_id}`}
                             className="flex items-center gap-3"
                           >
-                            <div className="relative w-9 h-9 rounded-lg overflow-hidden bg-gray-100 shrink-0 ring-1 ring-gray-200">
+                            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 shadow-sm ring-1 ring-white">
                               {entry.shop_image_url ? (
                                 <Image
                                   src={entry.shop_image_url}
@@ -412,12 +411,12 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                                   sizes="36px"
                                 />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  <Store className="w-4 h-4 text-gray-300" />
+                                <div className="flex h-full w-full items-center justify-center">
+                                  <Store className="h-4 w-4 text-gray-400" />
                                 </div>
                               )}
                             </div>
-                            <span className="font-medium text-gray-900 group-hover:text-green-600 transition-colors truncate">
+                            <span className="truncate font-medium text-gray-900 transition-colors group-hover:text-emerald-600">
                               {entry.shop_name}
                             </span>
                           </Link>
@@ -428,14 +427,14 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                               rating={Math.round(entry.avg_rating)}
                               size="sm"
                             />
-                            <span className="text-sm font-semibold text-gray-700">
+                            <span className="text-sm font-medium text-gray-900">
                               {entry.avg_rating.toFixed(2)}
                             </span>
                           </div>
                         </td>
                         <td className="px-5 py-3.5 text-right">
                           <span className="inline-flex items-center gap-1 text-sm text-gray-500">
-                            <MessageSquare className="w-3.5 h-3.5" />
+                            <MessageSquare className="h-3.5 w-3.5" />
                             {entry.review_count}
                           </span>
                         </td>
@@ -447,7 +446,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
             </div>
 
             {/* Mobile List */}
-            <div className="sm:hidden divide-y divide-gray-50">
+            <div className="divide-y divide-gray-50 sm:hidden">
               {filtered.map((entry, index) => {
                 const rank =
                   sortField === "rank" && sortDir === "asc"
@@ -457,10 +456,10 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                   <Link
                     key={entry.shop_id}
                     href={`/shops/${entry.shop_id}`}
-                    className="flex items-center gap-3 px-4 py-3.5 hover:bg-green-50/40 transition-colors active:bg-green-50"
+                    className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-emerald-50/40 active:bg-emerald-50"
                   >
                     <RankBadge rank={rank} />
-                    <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100 shrink-0 ring-1 ring-gray-200">
+                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 shadow-sm ring-1 ring-white">
                       {entry.shop_image_url ? (
                         <Image
                           src={entry.shop_image_url}
@@ -470,28 +469,28 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                           sizes="40px"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Store className="w-4 h-4 text-gray-300" />
+                        <div className="flex h-full w-full items-center justify-center">
+                          <Store className="h-4 w-4 text-gray-400" />
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate text-sm">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900">
                         {entry.shop_name}
                       </p>
-                      <div className="flex items-center gap-2 mt-0.5">
+                      <div className="mt-0.5 flex items-center gap-2">
                         <StarRating
                           rating={Math.round(entry.avg_rating)}
                           size="sm"
                         />
-                        <span className="text-xs font-medium text-gray-600">
+                        <span className="text-xs font-medium text-gray-500">
                           {entry.avg_rating.toFixed(1)}
                         </span>
                       </div>
                     </div>
-                    <div className="text-right shrink-0">
-                      <span className="text-xs text-gray-400 flex items-center gap-1">
-                        <MessageSquare className="w-3 h-3" />
+                    <div className="shrink-0 text-right">
+                      <span className="flex items-center gap-1 text-xs text-gray-400">
+                        <MessageSquare className="h-3 w-3" />
                         {entry.review_count}
                       </span>
                     </div>
@@ -509,16 +508,15 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
 /* ----------- Rank badge helper ----------- */
 function RankBadge({ rank }: { rank: number }) {
   const styles: Record<number, string> = {
-    1: "bg-amber-50 border border-amber-200 text-amber-600 shadow-sm",
-    2: "bg-slate-50 border border-slate-200 text-slate-600 shadow-sm",
-    3: "bg-orange-50 border border-orange-200 text-orange-600 shadow-sm",
+    1: "bg-amber-50 text-amber-700",
+    2: "bg-gray-100 text-gray-600",
+    3: "bg-orange-50 text-orange-600",
   };
-  const style =
-    styles[rank] ?? "bg-gray-50 border border-gray-200 text-gray-500 shadow-sm";
+  const style = styles[rank] ?? "bg-gray-50 text-gray-500";
 
   return (
     <div
-      className={`w-7 h-7 rounded flex items-center justify-center text-[11px] font-bold shrink-0 ${style}`}
+      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[11px] font-bold ${style}`}
     >
       {rank}
     </div>
@@ -541,18 +539,17 @@ function SortButton({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors
-        ${
-          active
-            ? "bg-green-100 text-green-700"
-            : "text-gray-500 hover:bg-gray-100"
-        }`}
+      className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
+        active
+          ? "bg-emerald-100 text-emerald-700"
+          : "text-gray-500 hover:bg-gray-100"
+      }`}
     >
       {label}
       <ArrowUpDown
-        className={`w-3 h-3 ${
-          active ? "text-green-600" : "text-gray-400"
-        } ${active && dir === "desc" ? "rotate-180" : ""} transition-transform`}
+        className={`h-3 w-3 transition-transform ${
+          active ? "text-emerald-600" : "text-gray-400"
+        } ${active && dir === "desc" ? "rotate-180" : ""}`}
       />
     </button>
   );

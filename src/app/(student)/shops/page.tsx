@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { ShopCard } from "@/components/ShopCard";
 import { StarRating } from "@/components/StarRating";
-import { Trophy } from "lucide-react";
+import { Trophy, Store, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { ShopWithRating, LeaderboardEntry } from "@/lib/types/database";
 
@@ -36,57 +36,59 @@ export default async function StudentDashboard() {
     .select("*")
     .limit(3);
 
+  const rankColors = [
+    "bg-amber-50 text-amber-700",
+    "bg-gray-100 text-gray-600",
+    "bg-orange-50 text-orange-600",
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="w-full space-y-5">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Food Shops</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">Food Shops</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Discover and review food shops at DIU campus
         </p>
       </div>
 
       {/* Top 3 Leaderboard Widget */}
       {topShops && topShops.length > 0 && (
-        <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 p-5">
-          <div className="flex items-center justify-between mb-4">
+        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-yellow-500" />
-              <h2 className="text-sm font-semibold text-gray-900">Top Rated Shops</h2>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50">
+                <Trophy className="h-4 w-4 text-amber-500" />
+              </div>
+              <h2 className="text-sm font-bold text-gray-900">Top Rated Shops</h2>
             </div>
             <Link
               href="/leaderboard"
-              className="text-xs font-medium text-green-600 hover:text-green-700"
+              className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
             >
-              View All →
+              View All <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {(topShops as LeaderboardEntry[]).map((entry, index) => (
               <Link
                 key={entry.shop_id}
                 href={`/shops/${entry.shop_id}`}
-                className="bg-white rounded-lg p-3 border border-green-100 hover:shadow-sm transition-shadow"
+                className="group rounded-xl border border-gray-100 bg-gray-50/50 p-3 transition-all hover:border-gray-200 hover:bg-white hover:shadow-sm"
               >
-                <div className="flex items-center gap-2 mb-1">
+                <div className="mb-1.5 flex items-center gap-2">
                   <span
-                    className={`text-xs font-bold ${
-                      index === 0
-                        ? "text-yellow-600"
-                        : index === 1
-                        ? "text-gray-500"
-                        : "text-orange-600"
-                    }`}
+                    className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-bold ${rankColors[index]}`}
                   >
-                    #{index + 1}
+                    {index + 1}
                   </span>
-                  <span className="text-sm font-medium text-gray-900 truncate">
+                  <span className="truncate text-sm font-medium text-gray-900 group-hover:text-emerald-600">
                     {entry.shop_name}
                   </span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <StarRating rating={Math.round(entry.avg_rating)} size="sm" />
-                  <span className="text-xs text-gray-500 ml-1">
+                  <span className="text-xs font-medium text-gray-500">
                     {entry.avg_rating.toFixed(1)}
                   </span>
                 </div>
@@ -98,11 +100,15 @@ export default async function StudentDashboard() {
 
       {/* All Shops Grid */}
       {shopsWithRatings.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-gray-500">No shops available yet.</p>
+        <div className="rounded-2xl border border-gray-100 bg-white p-12 text-center shadow-sm">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
+            <Store className="h-6 w-6 text-gray-300" />
+          </div>
+          <p className="text-sm font-medium text-gray-900">No shops available yet.</p>
+          <p className="mt-1 text-xs text-gray-400">Check back soon for new shops.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {shopsWithRatings.map((shop) => (
             <ShopCard key={shop.id} shop={shop} />
           ))}
