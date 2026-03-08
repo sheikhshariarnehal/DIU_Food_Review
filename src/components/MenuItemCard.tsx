@@ -27,7 +27,7 @@ export function MenuItemCard({
   const isActive = item.status === "active";
 
   return (
-    <Card className="group rounded-2xl border border-zinc-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col">
+    <Card className="group rounded-2xl border border-zinc-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col pt-0">
       {/* Image */}
       <div className="relative w-full aspect-[16/9] bg-zinc-100 overflow-hidden shrink-0">
         {item.image_url ? (
