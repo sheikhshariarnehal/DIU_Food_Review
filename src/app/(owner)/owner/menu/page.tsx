@@ -48,7 +48,7 @@ export default async function OwnerMenuPage() {
     .order("created_at", { ascending: true });
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto pb-12">
       <MenuClient shopId={shop.id} initialItems={menuItems ?? []} />
     </div>
   );

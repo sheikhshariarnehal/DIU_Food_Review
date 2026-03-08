@@ -9,7 +9,12 @@ import {
   deleteMenuItem,
 } from "@/app/actions/menu";
 import type { MenuItem } from "@/lib/types/database";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Search, Info } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface MenuClientProps {
   shopId: string;
@@ -82,21 +87,22 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Menu Management</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {items.length} item{items.length !== 1 ? "s" : ""}
+          <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">Menu Management</h1>
+          <p className="text-sm font-medium text-zinc-500 mt-1 flex items-center gap-1.5">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+            {items.length} active menu item{items.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <button
+        <Button
           onClick={() => {
             setShowForm(true);
             setEditItem(null);
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+          className="bg-zinc-900 hover:bg-zinc-800 text-white font-semibold rounded-xl h-11 px-5 shadow-sm transition-all"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 mr-2" />
           Add Item
-        </button>
+        </Button>
       </div>
 
       {error && (
@@ -107,93 +113,128 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
 
       {/* Add / Edit Form */}
       {(showForm || editItem) && (
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900">
-              {editItem ? "Edit Item" : "New Menu Item"}
-            </h3>
-            <button
+        <Card className="border-zinc-200 shadow-sm overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300">
+          <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 flex flex-row items-center justify-between py-4">
+            <CardTitle className="text-base font-bold text-zinc-900">
+              {editItem ? "Edit Menu Item" : "Create New Menu Item"}
+            </CardTitle>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => {
                 setShowForm(false);
                 setEditItem(null);
               }}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-zinc-500 hover:text-zinc-900 -mr-2"
             >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <form
-            action={editItem ? handleUpdate : handleAdd}
-            className="space-y-4"
-          >
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Name
-              </label>
-              <input
-                name="name"
-                type="text"
-                required
-                defaultValue={editItem?.name ?? ""}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <input
-                name="description"
-                type="text"
-                defaultValue={editItem?.description ?? ""}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Price (৳)
-              </label>
-              <input
-                name="price"
-                type="number"
-                step="0.01"
-                min="0"
-                required
-                defaultValue={editItem?.price ?? ""}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Image URL (optional)
-              </label>
-              <input
-                name="image_url"
-                type="url"
-                defaultValue={editItem?.image_url ?? ""}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              <X className="w-4 h-4" />
+            </Button>
+          </CardHeader>
+          <CardContent className="p-6">
+            <form
+              action={editItem ? handleUpdate : handleAdd}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
-              {loading ? "Saving..." : editItem ? "Update Item" : "Add Item"}
-            </button>
-          </form>
-        </div>
+              <div className="space-y-2.5">
+                <Label htmlFor="name" className="text-sm font-semibold text-zinc-700">
+                  Name <span className="text-rose-500">*</span>
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  placeholder="e.g. Classic Beef Burger"
+                  defaultValue={editItem?.name ?? ""}
+                  className="bg-zinc-50/50 focus-visible:ring-zinc-800"
+                />
+              </div>
+
+              <div className="space-y-2.5">
+                <Label htmlFor="price" className="text-sm font-semibold text-zinc-700">
+                  Price (৳) <span className="text-rose-500">*</span>
+                </Label>
+                <Input
+                  id="price"
+                  name="price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  required
+                  placeholder="0.00"
+                  defaultValue={editItem?.price ?? ""}
+                  className="bg-zinc-50/50 focus-visible:ring-zinc-800"
+                />
+              </div>
+
+              <div className="space-y-2.5 md:col-span-2">
+                <Label htmlFor="description" className="text-sm font-semibold text-zinc-700">
+                  Description
+                </Label>
+                <Input
+                  id="description"
+                  name="description"
+                  type="text"
+                  placeholder="Brief description of the item..."
+                  defaultValue={editItem?.description ?? ""}
+                  className="bg-zinc-50/50 focus-visible:ring-zinc-800"
+                />
+              </div>
+
+              <div className="space-y-2.5 md:col-span-2">
+                <Label htmlFor="image_url" className="text-sm font-semibold text-zinc-700">
+                  Image URL
+                </Label>
+                <Input
+                  id="image_url"
+                  name="image_url"
+                  type="url"
+                  placeholder="https://..."
+                  defaultValue={editItem?.image_url ?? ""}
+                  className="bg-zinc-50/50 focus-visible:ring-zinc-800"
+                />
+              </div>
+
+              <div className="md:col-span-2 pt-2 flex justify-end">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl h-11 px-6 shadow-sm min-w-[140px]"
+                >
+                  {loading ? "Saving..." : editItem ? "Update Item" : "Create Item"}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       )}
 
       {/* Items List */}
       {items.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <p className="text-gray-500 text-sm">
-            No menu items yet. Add your first item!
-          </p>
-        </div>
+        <Card className="border-dashed border-2 border-zinc-200 bg-zinc-50/50 shadow-none">
+          <CardContent className="flex flex-col items-center justify-center py-16 px-6 text-center">
+            <div className="w-12 h-12 rounded-full bg-zinc-100 flex items-center justify-center mb-4">
+              <Info className="w-6 h-6 text-zinc-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-zinc-900 mb-1">No menu items yet</h3>
+            <p className="text-sm text-zinc-500 max-w-sm mb-6">
+              Get started by adding your first menu item. It will appear here and become immediately visible to students on the app.
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowForm(true);
+                setEditItem(null);
+              }}
+              className="font-medium"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add First Item
+            </Button>
+          </CardContent>
+        </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item) => (
             <MenuItemCard
               key={item.id}
