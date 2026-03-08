@@ -1,0 +1,3833 @@
+[
+  {
+    "id": "TC001",
+    "title": "Email/password login succeeds and lands on authenticated student area",
+    "description": "Verifies a user can sign in with valid email/password and is redirected to an authenticated page.",
+    "category": "User Login",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Login\""
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign In\" button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Invalid password shows an error toast",
+    "description": "Verifies an incorrect password prevents login and displays an error message.",
+    "category": "User Login",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"wrong-password-123\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign In\" button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an error toast is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Non-existent user shows an error toast",
+    "description": "Verifies a non-existent account cannot log in and an error message is shown.",
+    "category": "User Login",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"no.such.user.987654@example.com\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"AnyPassword123!\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign In\" button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an error toast is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Login blocked when email is missing",
+    "description": "Verifies the form prevents submission (or shows a visible error) when email is empty.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign In\" button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Login blocked when password is missing",
+    "description": "Verifies the form prevents submission (or shows a visible error) when password is empty.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email input field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign In\" button to submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Password\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "User can navigate to Create Account from the login page",
+    "description": "Verifies the Create Account link routes the user from login to signup.",
+    "category": "User Login",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Create Account\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create Account\" link to go to signup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/signup"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Sign\""
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Student signup succeeds and shows success screen",
+    "description": "Verifies a new student can create an account and sees the student success confirmation screen.",
+    "category": "User Signup",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Click Student role toggle button"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Student\" into full name input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"student.signup.1772995442563@example.com\" into email input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"ValidPass123!\" into password input"
+      },
+      {
+        "type": "action",
+        "description": "Click Create Account button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Account created\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Student\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Shop Owner signup succeeds and shows pending approval message",
+    "description": "Verifies a new shop owner can create an account and is shown a pending approval state message.",
+    "category": "User Signup",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Click Shop Owner role toggle button"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Owner\" into full name input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"owner.signup.1772995442563@example.com\" into email input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"ValidPass123!\" into password input"
+      },
+      {
+        "type": "action",
+        "description": "Click Create Account button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Pending\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"approval\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Signup validation: missing full name blocks account creation",
+    "description": "Verifies full name is required and the user cannot create an account without it.",
+    "category": "User Signup",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Click Student role toggle button"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"student.missingname+1@example.com\" into email input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"ValidPass123!\" into password input"
+      },
+      {
+        "type": "action",
+        "description": "Click Create Account button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Full name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Signup validation: invalid email format shows error",
+    "description": "Verifies an invalid email address is rejected with a visible validation message.",
+    "category": "User Signup",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Click Student role toggle button"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Student\" into full name input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"not-an-email\" into email input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"ValidPass123!\" into password input"
+      },
+      {
+        "type": "action",
+        "description": "Click Create Account button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"valid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Signup validation: weak/too-short password shows error",
+    "description": "Verifies password rules are enforced and a weak password cannot be used to create an account.",
+    "category": "User Signup",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Click Student role toggle button"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Student\" into full name input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"student.weakpass+1@example.com\" into email input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"123\" into password input"
+      },
+      {
+        "type": "action",
+        "description": "Click Create Account button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"password\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"too\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Role toggle changes the expected post-signup outcome (Shop Owner path)",
+    "description": "Verifies selecting Shop Owner role results in the pending approval messaging rather than the student success messaging.",
+    "category": "User Signup",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Click Shop Owner role toggle button"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Toggle Owner\" into full name input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"owner.toggle+1@example.com\" into email input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"ValidPass123!\" into password input"
+      },
+      {
+        "type": "action",
+        "description": "Click Create Account button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Pending\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Create Account\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Signup submission prevents duplicate rapid submits (single visible outcome)",
+    "description": "Verifies clicking Create Account once leads to a single, stable result screen/message rather than multiple conflicting messages.",
+    "category": "User Signup",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Click Student role toggle button"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Rapid Submit Student\" into full name input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"student.rapidsubmit+1@example.com\" into email input"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"ValidPass123!\" into password input"
+      },
+      {
+        "type": "action",
+        "description": "Click Create Account button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Account created\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Account created\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Browse shops page shows shop cards with ratings and leaderboard preview",
+    "description": "Verifies an authenticated student can open the Shops page and see a grid of active shop cards with rating info and the top-3 leaderboard preview.",
+    "category": "Browse Shops",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Leaderboard\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Shop cards grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Average rating\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Open a shop detail page by clicking a shop card",
+    "description": "Verifies an authenticated student can navigate from the Shops list to an individual shop detail page by clicking a shop card.",
+    "category": "Browse Shops",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible shop card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Shop details header\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Shop cards display review count and average rating on the list view",
+    "description": "Verifies the Shops list presents rating context per shop card (average rating and review count) as visible text.",
+    "category": "Browse Shops",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Review count\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Star rating\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Average rating\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Leaderboard preview shows exactly three ranked entries",
+    "description": "Verifies the leaderboard preview widget on the Shops page displays a top-3 list for quick ranking visibility.",
+    "category": "Browse Shops",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Leaderboard\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Leaderboard rank 1\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Leaderboard rank 2\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Shops list supports scrolling and continues showing shop cards",
+    "description": "Verifies the Shops page remains usable when scrolling and continues to show shop cards and rating info below the fold.",
+    "category": "Browse Shops",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the bottom of the shops list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Shop card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Star rating\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Invalid login credentials prevent reaching the Shops page",
+    "description": "Verifies a user cannot reach the Shops page with incorrect credentials and sees a visible authentication error state.",
+    "category": "Browse Shops",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"fake.user@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongPassword123!\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Invalid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\"}"
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Open a shop detail page and verify shop profile, rating summary, menu, and reviews are visible",
+    "description": "Verifies a student can open a shop detail page from Shops list and see core shop info, rating summary, menu items, and reviews.",
+    "category": "View Shop Detail and Menu",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Shop name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Menu\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Verify shop rating summary shows average rating and review count",
+    "description": "Verifies the shop detail page displays an average rating and a review count in the rating summary area.",
+    "category": "View Shop Detail and Menu",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Average\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Reviews\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Browse menu items and confirm key fields are visible on at least one menu card",
+    "description": "Verifies a student can browse menu items and see name, price, and description for a menu item.",
+    "category": "View Shop Detail and Menu",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Menu\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Menu item name\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Read reviews list and verify reviewer name and rating are shown",
+    "description": "Verifies the reviews section shows reviewer identity and rating information for at least one review.",
+    "category": "View Shop Detail and Menu",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Reviews\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Reviewer name\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "View owner reply on a review when replies are present",
+    "description": "Verifies owner replies are displayed on the shop detail page when at least one review has a reply.",
+    "category": "View Shop Detail and Menu",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Reviews\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Owner reply\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Submit a new review with star rating and text, then verify it appears in the reviews list",
+    "description": "Verifies a student can submit a new review and then see the submitted text displayed in the reviews section.",
+    "category": "View Shop Detail and Menu",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Write a review\" section"
+      },
+      {
+        "type": "action",
+        "description": "Select a 5-star rating in the rating control"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E test review - great food and fast service.\" into the review text field"
+      }
+    ]
+  },
+  {
+    "id": "TC026",
+    "title": "Complete review submission and confirm success feedback is shown",
+    "description": "Verifies submitting a review shows a visible success message and the new review content becomes visible.",
+    "category": "View Shop Detail and Menu",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Write a review\" section"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Review submitted\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC027",
+    "title": "Validation: attempt to submit review with rating selected but empty text (when text is required)",
+    "description": "Verifies the UI prevents submission and shows a visible validation error when review text is missing.",
+    "category": "View Shop Detail and Menu",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first shop card in the shops list"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Write a review\" section"
+      },
+      {
+        "type": "action",
+        "description": "Select a 4-star rating in the rating control"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Review text is required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC028",
+    "title": "Leaderboard loads for authenticated student and shows ranked list columns",
+    "description": "Verifies an authenticated student can open the leaderboard and see ranked shops with key fields displayed.",
+    "category": "Leaderboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Leaderboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Average Rating\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC029",
+    "title": "Leaderboard entries display shop name, image, average rating, and review count",
+    "description": "Verifies each shop row shows the expected visible information for discovery and comparison.",
+    "category": "Leaderboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Leaderboard table\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that at least one shop row shows a visible shop name, a visible average rating value, and a visible review count value"
+      }
+    ]
+  },
+  {
+    "id": "TC030",
+    "title": "Top 3 rank badges are visible (1st/2nd/3rd) when enough shops exist",
+    "description": "Verifies rank indicators for the first three positions are displayed to highlight top performers.",
+    "category": "Leaderboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rank badge for 1\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rank badge for 2\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rank badge for 3\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC031",
+    "title": "Open a shop detail page by clicking a leaderboard entry",
+    "description": "Verifies a student can navigate from the leaderboard to a specific shop’s detail page via a row click.",
+    "category": "Leaderboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Leaderboard table\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the first shop entry in the leaderboard list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops/\""
+      }
+    ]
+  },
+  {
+    "id": "TC032",
+    "title": "Graceful empty state when there are no eligible shops to display",
+    "description": "Verifies the leaderboard shows a clear empty/notice message rather than a broken table when no shops qualify.",
+    "category": "Leaderboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Leaderboard table\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No shops\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC033",
+    "title": "Notice about minimum review threshold (if implemented) is visible when applicable",
+    "description": "Verifies the leaderboard communicates any minimum review requirement when few shops exist or data is limited.",
+    "category": "Leaderboard",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Leaderboard table\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"minimum\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC034",
+    "title": "Leaderboard remains usable after navigating to a shop and returning via in-app navigation",
+    "description": "Verifies the student can move between leaderboard and other student pages without losing usability or seeing an error state.",
+    "category": "Leaderboard",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the first shop entry in the leaderboard list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops/\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Leaderboard\" link in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Leaderboard table\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC035",
+    "title": "My Reviews: Edit an existing review and save changes",
+    "description": "Verifies a student can open an existing review from My Reviews, edit rating/text, save, and see the updated content.",
+    "category": "My Reviews",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"My Reviews\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Edit\" on the first review in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Save\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Select \"4\" from the rating dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Type \" Updated review text.\" into the review text field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Updated review text.\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC036",
+    "title": "My Reviews: Edit review then cancel/close without saving",
+    "description": "Verifies canceling an edit does not change the visible review content on the My Reviews list.",
+    "category": "My Reviews",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Review list\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Edit\" on the first review in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Save\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \" This should not be saved.\" into the review text field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Cancel\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"This should not be saved.\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC037",
+    "title": "My Reviews: Verify list shows required fields per review card",
+    "description": "Verifies each review card in My Reviews displays shop name, rating, review text, and timestamp.",
+    "category": "My Reviews",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Review list\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Shop name\" is visible in the first review card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rating\" is visible in the first review card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Review text\" is visible in the first review card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Timestamp\" is visible in the first review card"
+      }
+    ]
+  },
+  {
+    "id": "TC038",
+    "title": "My Reviews: View owner reply when present",
+    "description": "Verifies that if a review has an owner reply, the reply content is visible on the review card.",
+    "category": "My Reviews",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"My Reviews\""
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the bottom of the reviews list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Owner reply\" is visible on at least one review card"
+      }
+    ]
+  },
+  {
+    "id": "TC039",
+    "title": "My Reviews: Stats display total reviews and replies received",
+    "description": "Verifies the My Reviews page displays stats for total reviews and replies received.",
+    "category": "My Reviews",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Total reviews value\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Replies received\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Replies received value\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC040",
+    "title": "My Reviews: Empty state shows Browse shops and navigates to Shops",
+    "description": "Verifies that when the student has no reviews, an empty state appears with a Browse shops link that takes the user to /shops.",
+    "category": "My Reviews",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Browse shops\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Browse shops\" link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      }
+    ]
+  },
+  {
+    "id": "TC041",
+    "title": "My Reviews: Save validation blocks empty review text",
+    "description": "Verifies attempting to save an edited review with empty text shows a visible validation message and does not update the review card.",
+    "category": "My Reviews",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Review list\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Edit\" on the first review in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Save\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"\" into the review text field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Review text is required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC042",
+    "title": "My Reviews: Login required to access My Reviews (positive login flow)",
+    "description": "Verifies the user can authenticate and reach the My Reviews page via in-app navigation after login.",
+    "category": "My Reviews",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"My Reviews\" in the navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/my-reviews\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"My Reviews\""
+      }
+    ]
+  },
+  {
+    "id": "TC043",
+    "title": "Create a new shop from Owner Dashboard (no existing shop) and see stats",
+    "description": "Verifies an owner without an existing shop can create a shop and then sees the dashboard stats and navigation links.",
+    "category": "Owner Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Fill a unique shop name into the shop name field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a description into the description field"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"https://example.com/shop.jpg\" into the image URL field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create Shop\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Average Rating\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total Reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Rank\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC044",
+    "title": "Owner Dashboard shows performance stats when a shop already exists",
+    "description": "Verifies an owner with an existing shop can open the dashboard and see shop performance statistics.",
+    "category": "Owner Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Average Rating\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total Reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Rank\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Recent Reviews\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC045",
+    "title": "Owner Dashboard lists recent reviews section (empty or populated)",
+    "description": "Verifies the dashboard renders the Recent Reviews area for the owner’s shop.",
+    "category": "Owner Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Recent Reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Recent Reviews\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC046",
+    "title": "Navigate from Owner Dashboard to Menu management page",
+    "description": "Verifies the owner can use dashboard navigation to reach the menu management page.",
+    "category": "Owner Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Menu\" link/button on the dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/menu\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Menu\""
+      }
+    ]
+  },
+  {
+    "id": "TC047",
+    "title": "Navigate from Owner Dashboard to Reviews page",
+    "description": "Verifies the owner can navigate from dashboard to the reviews management page.",
+    "category": "Owner Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reviews\" link/button on the dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/reviews\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Reviews\""
+      }
+    ]
+  },
+  {
+    "id": "TC048",
+    "title": "Navigate from Owner Dashboard to Shop Settings page",
+    "description": "Verifies the owner can navigate from dashboard to shop profile/settings page.",
+    "category": "Owner Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Shop\" or \"Settings\" link/button on the dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/shop\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Shop\""
+      }
+    ]
+  },
+  {
+    "id": "TC049",
+    "title": "Pending owner sees pending approval message instead of dashboard access",
+    "description": "Verifies an owner with pending status is shown the pending page or a wait-for-approval message when attempting to access the dashboard.",
+    "category": "Owner Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Owner Dashboard\" link/button if visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/pending\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"pending\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC050",
+    "title": "Pending owner cannot access Owner Menu and is redirected/blocked",
+    "description": "Verifies an owner with pending status attempting to reach menu is blocked with redirect to pending page or an access denied message.",
+    "category": "Owner Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /owner/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner/pending\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"approval\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC051",
+    "title": "Create a new menu item successfully",
+    "description": "Verifies a shop owner can add a new menu item and see it appear in the menu list.",
+    "category": "Menu Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Menu\" navigation item"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Add Menu Item\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Add Menu Item\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Test Burger\" into the Name field"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Grilled burger for E2E test\" into the Description field"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"199\" into the Price field"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"https://example.com/test-burger.jpg\" into the Image URL field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Test Burger\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC052",
+    "title": "Validate required fields when creating a menu item",
+    "description": "Verifies the add menu item form blocks submission and shows visible validation when required fields are missing.",
+    "category": "Menu Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Menu\" navigation item"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Add Menu Item\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Price\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC053",
+    "title": "Owner submits a reply to an unanswered review and sees it displayed",
+    "description": "Verifies a shop owner can reply to an unanswered customer review and the reply appears on the review card after submission.",
+    "category": "Reply to Reviews",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Reviews\" is visible on the page"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reply\" button on a review card that does not already show an owner reply"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Thanks for your feedback! We’ll work on this.\" into the reply text area"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Thanks for your feedback! We’ll work on this.\" is visible on that review card"
+      }
+    ]
+  },
+  {
+    "id": "TC054",
+    "title": "Reply submission blocked when reply text is empty",
+    "description": "Verifies the reply form shows a validation error and does not submit when the reply text is left empty.",
+    "category": "Reply to Reviews",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reply\" button on a review card"
+      },
+      {
+        "type": "action",
+        "description": "Click into the reply text area"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Reply is required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC055",
+    "title": "Owner can view review details (reviewer name, rating, and text) on the Reviews page",
+    "description": "Verifies the Reviews page renders key review information for the owner’s shop.",
+    "category": "Reply to Reviews",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"a review card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"reviewer name\" is visible within a review card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"star rating\" is visible within a review card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"review text\" is visible within a review card"
+      }
+    ]
+  },
+  {
+    "id": "TC056",
+    "title": "Reply form becomes visible after clicking Reply on a review card",
+    "description": "Verifies that clicking Reply reveals the reply text area and submit controls for that specific review.",
+    "category": "Reply to Reviews",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reply\" button on a review card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"reply text area\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Submit\" button is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC057",
+    "title": "Owner reply persists after page refresh (re-open Reviews page)",
+    "description": "Verifies that a submitted reply is still shown when returning to the Reviews page later in the session.",
+    "category": "Reply to Reviews",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reply\" button on a review card that does not already show an owner reply"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Appreciate the review—thank you!\" into the reply text area"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Appreciate the review—thank you!\" is visible on that review card"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Appreciate the review—thank you!\" is visible on a review card"
+      }
+    ]
+  },
+  {
+    "id": "TC058",
+    "title": "Submitting a long reply text displays the full reply on the review card",
+    "description": "Verifies the system accepts a longer reply and displays it on the review card after submission.",
+    "category": "Reply to Reviews",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reply\" button on a review card that does not already show an owner reply"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Thank you for taking the time to share this detailed feedback. We are reviewing it with the team and will make improvements soon.\" into the reply text area"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Thank you for taking the time to share this detailed feedback.\" is visible on that review card"
+      }
+    ]
+  },
+  {
+    "id": "TC059",
+    "title": "Owner can scroll and reply to a review further down the list",
+    "description": "Verifies the owner can scroll the Reviews page, open a reply form on a later review card, and submit a reply successfully.",
+    "category": "Reply to Reviews",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Reviews\" in the owner navigation/menu"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the bottom of the reviews list"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reply\" button on a review card that does not already show an owner reply"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Thanks! We’re glad you enjoyed it.\" into the reply text area"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Thanks! We’re glad you enjoyed it.\" is visible on that review card"
+      }
+    ]
+  },
+  {
+    "id": "TC060",
+    "title": "Update shop name successfully from Shop Settings",
+    "description": "Verifies a shop owner can change the shop name and see a success confirmation.",
+    "category": "Shop Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Updated Shop Name\" into the shop name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save Changes\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"success\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC061",
+    "title": "Update shop description successfully from Shop Settings",
+    "description": "Verifies a shop owner can change the shop description and see a success confirmation.",
+    "category": "Shop Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Updated shop description for E2E testing.\" into the description field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save Changes\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"success\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC062",
+    "title": "Update shop image URL successfully from Shop Settings",
+    "description": "Verifies a shop owner can change the shop image URL and see a success confirmation.",
+    "category": "Shop Settings",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"https://example.com/shop-image.png\" into the image URL field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save Changes\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"success\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC063",
+    "title": "Verify updated values persist after saving and revisiting Shop Settings",
+    "description": "Verifies saved shop settings remain visible after leaving the page and returning.",
+    "category": "Shop Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Persistent Name\" into the shop name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save Changes\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"success\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Dashboard\" item in the owner navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Persistent Name\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC064",
+    "title": "Prevent save when image URL is invalid",
+    "description": "Verifies invalid image URL input blocks saving and shows a visible error state.",
+    "category": "Shop Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"not-a-url\" into the image URL field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save Changes\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"error\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC065",
+    "title": "Prevent save when required shop name is empty",
+    "description": "Verifies clearing a required field (shop name) prevents saving and shows a visible validation message.",
+    "category": "Shop Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Fill \"\" into the shop name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save Changes\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC066",
+    "title": "No-op save still returns a visible confirmation or non-error state",
+    "description": "Verifies clicking Save Changes without editing does not break the page and provides a visible success or safe outcome.",
+    "category": "Shop Settings",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save Changes\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC067",
+    "title": "Shop Settings page displays current editable fields for profile",
+    "description": "Verifies the Shop Settings screen loads and shows the expected editable fields for name, description, and image URL.",
+    "category": "Shop Settings",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/owner\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Shop\" or \"Shop Settings\" item in the owner navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Shop\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Description\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Image URL\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Save Changes\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC068",
+    "title": "Admin dashboard loads and shows KPI cards",
+    "description": "Verifies an authenticated admin can open the Admin Dashboard and see the primary KPI cards.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Admin Dashboard\" in the app navigation (or admin sidebar) if visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total Shops\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total Users\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC069",
+    "title": "Admin dashboard shows remaining KPI tiles and pending approvals indicator",
+    "description": "Verifies the dashboard includes review-related KPIs and the pending approvals count/indicator.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total Reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Pending Approvals\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Pending Approvals\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC070",
+    "title": "Admin dashboard displays global average rating section",
+    "description": "Verifies the dashboard shows a global average rating value/section to the admin.",
+    "category": "Admin Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Average Rating\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Average Rating\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Recent Reviews\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC071",
+    "title": "Admin can view Recent Reviews list on dashboard",
+    "description": "Verifies the Recent Reviews section is present and renders review entries for the admin.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Recent Reviews\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Recent Reviews\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Recent Reviews\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC072",
+    "title": "Admin can view Top 5 Rated Shops section on dashboard",
+    "description": "Verifies the Top 5 Rated Shops section is present and visible on the admin dashboard.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Top Rated Shops\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Top Rated Shops\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Top Rated Shops\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC073",
+    "title": "Admin navigates from dashboard to Approvals via sidebar",
+    "description": "Verifies an admin can use the sidebar navigation from the dashboard to reach the Approvals page.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Approvals\" in the sidebar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/approvals\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Approvals\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC074",
+    "title": "Admin navigates from dashboard to Shops management via sidebar",
+    "description": "Verifies an admin can navigate from the dashboard to the Admin Shops page using sidebar links.",
+    "category": "Admin Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Shops\" in the sidebar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/shops\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Shops\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC075",
+    "title": "Admin navigates from dashboard to Users management via sidebar",
+    "description": "Verifies an admin can navigate from the dashboard to the Admin Users page using sidebar links.",
+    "category": "Admin Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Users\" in the sidebar"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/users\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Users\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC076",
+    "title": "Non-admin user is blocked from viewing Admin Dashboard",
+    "description": "Verifies a non-admin account cannot access the Admin Dashboard and sees an access denied message or is redirected appropriately.",
+    "category": "Admin Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"student.user@example.com\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongPassword123!\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Login\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin/dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Access denied\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC077",
+    "title": "Admin can open Approvals page and see pending applicants list details",
+    "description": "Verifies the admin can access the approvals page and view pending shop owner applicants with key details displayed.",
+    "category": "Approve or Reject Shop Owners",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Approvals\" in the admin navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Approvals\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Pending\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC078",
+    "title": "Approvals list shows applicant attributes (name, email, DIU verification, joined date)",
+    "description": "Verifies the pending applicants list contains visible fields for applicant identity and verification metadata.",
+    "category": "Approve or Reject Shop Owners",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Approvals\" in the admin navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Pending shop owner applications list\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Joined\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC079",
+    "title": "Approve a pending shop owner application from the Approvals page",
+    "description": "Verifies an admin can approve a pending shop owner and sees a success state.",
+    "category": "Approve or Reject Shop Owners",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Approvals\" in the admin navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Approve\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Approve\" button for the first pending applicant"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Approved\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"success\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC080",
+    "title": "After approval, the applicant is removed from the pending list",
+    "description": "Verifies approving an applicant causes them to disappear from the pending approvals list.",
+    "category": "Approve or Reject Shop Owners",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Approvals\" in the admin navigation menu"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Approve\" button for the first pending applicant"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No pending\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"applications\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC081",
+    "title": "Reject a pending shop owner application with confirmation dialog",
+    "description": "Verifies an admin can reject an applicant, confirm the action, and see a success state.",
+    "category": "Approve or Reject Shop Owners",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Approvals\" in the admin navigation menu"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reject\" button for the first pending applicant"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Confirm\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Confirm\" button in the dialog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Rejected\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC082",
+    "title": "Cancel rejection from the confirmation dialog keeps applicant in pending list",
+    "description": "Verifies canceling the reject confirmation dialog does not change the pending list.",
+    "category": "Approve or Reject Shop Owners",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Approvals\" in the admin navigation menu"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Reject\" button for the first pending applicant"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Confirm\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Cancel\" button in the dialog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Pending shop owner applications list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC083",
+    "title": "Create a new shop with owner assignment and image URL",
+    "description": "Verifies an admin can create a shop and see it appear in the shops table with the entered details.",
+    "category": "Admin Shop Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Shops\" in the admin navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create Shop\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Create Shop\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"E2E Test Shop A\" into the shop name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"A shop created by an automated UI test.\" into the description field"
+      },
+      {
+        "type": "action",
+        "description": "Select an available owner from the owner dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Type \"https://example.com/shop-image.jpg\" into the image URL field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" or \"Create\" button in the dialog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"E2E Test Shop A\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC084",
+    "title": "Validation prevents creating a shop when required fields are missing",
+    "description": "Verifies the create-shop form shows visible validation feedback and does not create a shop when required inputs are empty.",
+    "category": "Admin Shop Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Shops\" in the admin navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/shops\""
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Create Shop\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Create Shop\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" or \"Create\" button in the dialog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC085",
+    "title": "Shops list loads and displays core columns (shop name and owner)",
+    "description": "Verifies the admin shops page renders the shops table and displays owner name information.",
+    "category": "Admin Shop Management",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Shops\" in the admin navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin/shops\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Shops table\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Owner\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC086",
+    "title": "Admin can view user list with key columns and DIU verification badges",
+    "description": "Verifies the admin can access the Users page and see a populated list with expected visible profile fields and verification indicators.",
+    "category": "Admin User Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Users\" in the admin navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Users\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"User list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC087",
+    "title": "Admin sees user profile rows showing name, email, role, and status",
+    "description": "Verifies each user row shows the key metadata fields required for user management decisions.",
+    "category": "Admin User Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"teststudent@diu.edu.bd\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test@12345\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Users\" in the admin navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Role\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Status\" is visible"
+      }
+    ]
+  }
+]

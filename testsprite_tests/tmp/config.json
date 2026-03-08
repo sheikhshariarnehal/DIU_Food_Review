@@ -1,0 +1,26 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "teststudent@diu.edu.bd",
+  "loginPassword": "Test@12345",
+  "executionArgs": {
+    "projectName": "DIU Food Review",
+    "projectPath": "d:\\Poject\\DIU Food Review",
+    "testIds": [
+      "TC002",
+      "TC007",
+      "TC008",
+      "TC014",
+      "TC015"
+    ],
+    "additionalInstruction": "IMPORTANT CREDENTIAL MAPPING: For all tests that require login, use these credentials: email = teststudent@diu.edu.bd, password = Test@12345. This is a student account that redirects to /shops after login. The test plan already has the correct emails hardcoded. Do NOT use admin credentials.",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-t5rhm6z2c09ai8tDvCIClsAbKNYfkAZ_PM2ywOSGZR6HaHg2QDm2akMcMrW3krnjIziaueLKGEGnF88j5FrzxBfghsVZMndH7eXa6wMTi8fRoOcIIiWkgAG94h6Uv2LPAMc"
+    }
+  },
+  "serverPort": 4736,
+  "proxy": "http://5b14b5fd-14af-43e7-a7b4-d34c22fe4f1e:RGlYyrF9QXVfYkjf6c6yFMqkCE73FvS6@tun.testsprite.com:8080"
+}

@@ -1,0 +1,399 @@
+version: "2"
+type: frontend
+tech_stack:
+  - language: TypeScript
+  - framework: Next.js 16 (App Router)
+  - ui_library: shadcn/ui + Tailwind CSS v4
+  - database: Supabase (PostgreSQL + Auth + RLS)
+  - state_management: Zustand
+  - other: Lucide React, Sonner toasts, next-themes
+
+routes:
+  - path: /
+    file: src/app/page.tsx
+    auth_required: false
+    description: Landing page with hero section and CTA buttons to login/signup
+
+  - path: /login
+    file: src/app/(auth)/login/page.tsx
+    auth_required: false
+    description: Email/password login with Google OAuth option
+
+  - path: /signup
+    file: src/app/(auth)/signup/page.tsx
+    auth_required: false
+    description: Registration with student or shop_owner role selection
+
+  - path: /auth/callback
+    file: src/app/(auth)/auth/callback/route.ts
+    auth_required: false
+    description: OAuth and email confirmation callback handler
+
+  - path: /shops
+    file: src/app/(student)/shops/page.tsx
+    auth_required: true
+    description: Browse all active food shops with ratings (student only)
+
+  - path: /shops/[shopId]
+    file: src/app/(student)/shops/[shopId]/page.tsx
+    auth_required: true
+    description: Shop detail page with menu items, reviews, and review form
+
+  - path: /leaderboard
+    file: src/app/(student)/leaderboard/page.tsx
+    auth_required: true
+    description: Ranked list of all shops ordered by average rating
+
+  - path: /my-reviews
+    file: src/app/(student)/my-reviews/page.tsx
+    auth_required: true
+    description: Student's review history with owner replies
+
+  - path: /owner/pending
+    file: src/app/(owner)/owner/pending/page.tsx
+    auth_required: true
+    description: Holding page for shop owners awaiting admin approval
+
+  - path: /owner/dashboard
+    file: src/app/(owner)/owner/dashboard/page.tsx
+    auth_required: true
+    description: Shop owner dashboard - create shop or view stats
+
+  - path: /owner/menu
+    file: src/app/(owner)/owner/menu/page.tsx
+    auth_required: true
+    description: Menu item management (CRUD with status toggling)
+
+  - path: /owner/reviews
+    file: src/app/(owner)/owner/reviews/page.tsx
+    auth_required: true
+    description: View reviews received on shop and reply to them
+
+  - path: /owner/shop
+    file: src/app/(owner)/owner/shop/page.tsx
+    auth_required: true
+    description: Shop profile settings (name, description, image)
+
+  - path: /admin/dashboard
+    file: src/app/(admin)/admin/dashboard/page.tsx
+    auth_required: true
+    description: Admin KPIs - total shops, users, reviews, pending approvals
+
+  - path: /admin/approvals
+    file: src/app/(admin)/admin/approvals/page.tsx
+    auth_required: true
+    description: Approve or reject pending shop owner applications
+
+  - path: /admin/shops
+    file: src/app/(admin)/admin/shops/page.tsx
+    auth_required: true
+    description: Full shop management for admins (CRUD + owner assignment)
+
+  - path: /admin/users
+    file: src/app/(admin)/admin/users/page.tsx
+    auth_required: true
+    description: User management - view and change account statuses
+
+features:
+  - name: User Login
+    description: Authenticate with email/password or Google OAuth
+    files:
+      - src/app/(auth)/login/page.tsx
+      - src/app/actions/auth.ts
+    entry_route: /login
+    user_interactions:
+      - Fill email input field
+      - Fill password input field
+      - Click Sign In button to submit
+      - See error toast on invalid credentials
+      - Click Sign in with Google for OAuth
+      - Click Create Account link to go to signup
+    api_calls:
+      - method: POST
+        endpoint: supabase.auth.signInWithPassword
+      - method: POST
+        endpoint: supabase.auth.signInWithOAuth (Google)
+    auth_required: false
+
+  - name: User Signup
+    description: Register as student or shop owner
+    files:
+      - src/app/(auth)/signup/page.tsx
+      - src/app/actions/auth.ts
+    entry_route: /signup
+    user_interactions:
+      - Click Student or Shop Owner role toggle button
+      - Fill full name input
+      - Fill email input
+      - Fill password input
+      - Click Create Account button
+      - See success screen or pending approval message
+    api_calls:
+      - method: POST
+        endpoint: supabase.auth.signUp
+    auth_required: false
+
+  - name: Browse Shops
+    description: Students view all active shops with ratings and leaderboard preview
+    files:
+      - src/app/(student)/shops/page.tsx
+      - src/components/ShopCard.tsx
+      - src/components/StarRating.tsx
+    entry_route: /shops
+    user_interactions:
+      - View grid of shop cards with images
+      - See average rating and review count per shop
+      - View top 3 leaderboard widget
+      - Click shop card to view shop detail
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT shops WHERE is_active=true
+      - method: GET
+        endpoint: supabase RPC get_shop_average_rating
+      - method: GET
+        endpoint: supabase SELECT leaderboard_view LIMIT 3
+    auth_required: true
+
+  - name: View Shop Detail and Menu
+    description: View shop info, menu items, and all reviews
+    files:
+      - src/app/(student)/shops/[shopId]/page.tsx
+      - src/components/MenuItemCard.tsx
+      - src/components/ReviewCard.tsx
+      - src/components/ReviewForm.tsx
+    entry_route: /shops/[shopId]
+    user_interactions:
+      - View shop name, description, and image
+      - View average rating and review count
+      - Browse menu items with names, prices, descriptions
+      - Read all reviews with reviewer names and ratings
+      - See owner replies to reviews if present
+      - Submit new review with star rating and text body
+      - Edit own existing review
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT shops WHERE id=shopId
+      - method: GET
+        endpoint: supabase RPC get_shop_average_rating
+      - method: GET
+        endpoint: supabase SELECT menu_items WHERE shop_id=shopId
+      - method: GET
+        endpoint: supabase SELECT reviews with profiles and review_replies WHERE shop_id=shopId
+      - method: POST
+        endpoint: submitReview server action (INSERT INTO reviews)
+      - method: PUT
+        endpoint: updateReview server action (UPDATE reviews)
+    auth_required: true
+
+  - name: Leaderboard
+    description: View shops ranked by average rating
+    files:
+      - src/app/(student)/leaderboard/page.tsx
+      - src/components/LeaderboardTable.tsx
+    entry_route: /leaderboard
+    user_interactions:
+      - View ranked shops with name, image, average rating, review count
+      - See rank badges (1st, 2nd, 3rd with special styling)
+      - Click shop to view detail page
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT leaderboard_view
+    auth_required: true
+
+  - name: My Reviews
+    description: Student views their submitted reviews and owner replies
+    files:
+      - src/app/(student)/my-reviews/page.tsx
+      - src/components/ReviewCard.tsx
+    entry_route: /my-reviews
+    user_interactions:
+      - View all own reviews with shop name, rating, text, timestamp
+      - See owner replies if present
+      - View stats (total reviews, replies received)
+      - Click Edit to modify a review
+      - Click Browse shops link if no reviews yet
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT reviews with shops and review_replies WHERE user_id=currentUser
+    auth_required: true
+
+  - name: Owner Dashboard
+    description: Shop owner creates their shop or views shop performance stats
+    files:
+      - src/app/(owner)/owner/dashboard/page.tsx
+      - src/app/(owner)/owner/dashboard/CreateShopForm.tsx
+    entry_route: /owner/dashboard
+    user_interactions:
+      - If no shop - fill shop name, description, image URL in CreateShopForm then click Create Shop
+      - If shop exists - view rating, review count, rank stats
+      - See recent reviews on dashboard
+      - Navigate to menu, reviews, or settings pages
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT shops WHERE owner_id=currentUser
+      - method: POST
+        endpoint: createOwnShop server action (INSERT INTO shops)
+      - method: GET
+        endpoint: supabase RPC get_shop_average_rating
+      - method: GET
+        endpoint: supabase SELECT leaderboard_view
+    auth_required: true
+
+  - name: Menu Management
+    description: Shop owner adds, edits, archives, and deletes menu items
+    files:
+      - src/app/(owner)/owner/menu/page.tsx
+      - src/app/(owner)/owner/menu/MenuClient.tsx
+      - src/components/MenuItemCard.tsx
+    entry_route: /owner/menu
+    user_interactions:
+      - Click Add Menu Item button to open dialog
+      - Fill name, description, price, image URL fields
+      - Submit to create menu item
+      - Click Edit icon on existing item to update details
+      - Click Archive/Restore to toggle item availability
+      - Click Delete icon and confirm in alert dialog
+    api_calls:
+      - method: POST
+        endpoint: addMenuItem server action (INSERT INTO menu_items)
+      - method: PUT
+        endpoint: updateMenuItem server action (UPDATE menu_items)
+      - method: PUT
+        endpoint: toggleMenuItemStatus server action (UPDATE menu_items SET status)
+      - method: DELETE
+        endpoint: deleteMenuItem server action (DELETE FROM menu_items)
+    auth_required: true
+
+  - name: Reply to Reviews
+    description: Shop owner views and replies to customer reviews
+    files:
+      - src/app/(owner)/owner/reviews/page.tsx
+      - src/components/ReviewCard.tsx
+      - src/components/ReplyForm.tsx
+    entry_route: /owner/reviews
+    user_interactions:
+      - View all reviews for own shop
+      - See reviewer name, star rating, review text
+      - Click reply button on unanswered review
+      - Type reply text in text area
+      - Submit reply
+      - See own reply displayed on review card
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT reviews with profiles and review_replies WHERE shop_id=ownShopId
+      - method: POST
+        endpoint: submitReply server action (INSERT INTO review_replies)
+    auth_required: true
+
+  - name: Shop Settings
+    description: Shop owner edits their shop profile (name, description, image)
+    files:
+      - src/app/(owner)/owner/shop/page.tsx
+      - src/app/(owner)/owner/shop/ShopSettingsClient.tsx
+    entry_route: /owner/shop
+    user_interactions:
+      - View current shop name, description, image URL fields
+      - Edit any field
+      - Click Save Changes button
+      - See success or error toast notification
+    api_calls:
+      - method: PUT
+        endpoint: updateOwnShop server action (UPDATE shops)
+    auth_required: true
+
+  - name: Admin Dashboard
+    description: Admin overview of platform activity and KPIs
+    files:
+      - src/app/(admin)/admin/dashboard/page.tsx
+    entry_route: /admin/dashboard
+    user_interactions:
+      - View KPI cards (total shops, users, reviews, pending approvals count)
+      - View global average rating
+      - View recent reviews list
+      - View top 5 rated shops
+      - Navigate to other admin sections via sidebar
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT COUNT shops, profiles, reviews
+      - method: GET
+        endpoint: supabase SELECT profiles WHERE role=shop_owner AND status=pending
+      - method: GET
+        endpoint: supabase SELECT leaderboard_view LIMIT 5
+    auth_required: true
+
+  - name: Approve or Reject Shop Owners
+    description: Admin reviews pending shop owner applications and approves or rejects them
+    files:
+      - src/app/(admin)/admin/approvals/page.tsx
+      - src/app/(admin)/admin/approvals/ApprovalsClient.tsx
+    entry_route: /admin/approvals
+    user_interactions:
+      - View list of pending shop owner accounts
+      - See applicant name, email, DIU verification badge, joined date
+      - Click Approve button to activate owner account
+      - Click Reject button, confirm in dialog to suspend account
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT profiles WHERE role=shop_owner AND status=pending
+      - method: PUT
+        endpoint: approveShopOwner server action (UPDATE profiles SET status=active)
+      - method: PUT
+        endpoint: rejectShopOwner server action (UPDATE profiles SET status=suspended)
+    auth_required: true
+
+  - name: Admin Shop Management
+    description: Admin creates, edits, and deletes shops across the platform
+    files:
+      - src/app/(admin)/admin/shops/page.tsx
+      - src/app/(admin)/admin/shops/ShopsClient.tsx
+    entry_route: /admin/shops
+    user_interactions:
+      - View table of all shops with owner names
+      - Click Create Shop button to open form dialog
+      - Fill name, description, owner dropdown, image URL
+      - Submit to create shop
+      - Click Edit on existing shop
+      - Toggle shop active status checkbox
+      - Click Delete and confirm to remove shop
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT shops with profiles(full_name)
+      - method: POST
+        endpoint: createShop server action (INSERT INTO shops)
+      - method: PUT
+        endpoint: updateShop server action (UPDATE shops)
+      - method: DELETE
+        endpoint: deleteShop server action (DELETE FROM shops)
+    auth_required: true
+
+  - name: Admin User Management
+    description: Admin views all user accounts and changes their status
+    files:
+      - src/app/(admin)/admin/users/page.tsx
+      - src/app/(admin)/admin/users/UsersClient.tsx
+    entry_route: /admin/users
+    user_interactions:
+      - View list of all user profiles with name, email, role, status
+      - See DIU verification badge on verified accounts
+      - Click Suspend to deactivate user (active -> suspended)
+      - Click Activate to restore user (suspended -> active)
+    api_calls:
+      - method: GET
+        endpoint: supabase SELECT profiles ORDER BY created_at DESC
+      - method: PUT
+        endpoint: updateUserStatus server action (UPDATE profiles SET status)
+    auth_required: true
+
+known_limitations:
+  - issue: Authentication uses Supabase so test login requires real credentials or seeded test data
+    location: src/app/actions/auth.ts
+    impact: E2E tests may need mock auth or pre-seeded test accounts
+  - issue: Google OAuth requires browser redirect - can't be fully automated in headless tests
+    location: src/app/(auth)/login/page.tsx
+    impact: OAuth flow tests limited to verifying redirect occurs
+  - issue: Image uploads are via URL input only - no file upload UI
+    location: src/app/(owner)/owner/menu/MenuClient.tsx
+    impact: Image-related tests limited to URL validation
+  - issue: One review per student per shop enforced by DB UNIQUE constraint
+    location: supabase/migrations/001_initial_schema.sql
+    impact: Test must create fresh review per shop or update existing
