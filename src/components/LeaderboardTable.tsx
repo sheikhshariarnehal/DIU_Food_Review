@@ -17,8 +17,6 @@ import type { LeaderboardEntry } from "@/lib/types/database";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useMemo } from "react";
-import { ShineBorder } from "@/components/ui/shine-border";
-import { NumberTicker } from "@/components/ui/number-ticker";
 
 interface LeaderboardTableProps {
   entries: LeaderboardEntry[];
@@ -86,13 +84,6 @@ function PodiumCard({
           p-5 flex flex-col items-center justify-center text-center transition-all
           duration-300 hover:scale-[1.03] hover:shadow-xl ${c.height}`}
       >
-        {rank === 1 && (
-          <ShineBorder
-            shineColor={["#facc15", "#f59e0b"]}
-            borderWidth={2}
-            duration={10}
-          />
-        )}
         {/* Rank badge */}
         <div
           className={`absolute -top-3 left-1/2 -translate-x-1/2 ${c.badgeBg} ${c.badge}
@@ -175,16 +166,12 @@ function StatsBar({ entries }: { entries: LeaderboardEntry[] }) {
       {stats.map((s) => (
         <div
           key={s.label}
-          className="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 text-center relative overflow-hidden"
+          className="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 text-center"
         >
           <div className="flex items-center justify-center gap-1.5 mb-1">
             {s.icon}
             <span className="text-lg sm:text-xl font-bold text-gray-800">
-              {typeof s.value === "number" ? (
-                <NumberTicker value={s.value} />
-              ) : (
-                s.value
-              )}
+              {s.value}
             </span>
           </div>
           <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wider">

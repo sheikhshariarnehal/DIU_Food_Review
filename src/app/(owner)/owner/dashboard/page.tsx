@@ -7,23 +7,21 @@ import {
   UtensilsCrossed,
   Trophy,
   ArrowRight,
-  Crown,
-  Medal,
-  Award,
-  CheckCircle2,
-  XCircle,
   ChevronRight,
-  Flame,
-  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import CreateShopForm from "./CreateShopForm";
-import { Card, CardHeader, CardContent, CardAction } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import type { LeaderboardEntry } from "@/lib/types/database";
 import { formatDistanceToNow } from "@/lib/utils/date";
+
+// Shadcn UI components
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 export const revalidate = 60;
 
@@ -33,32 +31,25 @@ function StatCard({
   value,
   sub,
   icon,
-  extra,
 }: {
   label: string;
   value: string | number;
-  sub?: string;
+  sub?: React.ReactNode;
   icon: React.ReactNode;
-  extra?: React.ReactNode;
 }) {
   return (
-    <Card className="hover:shadow-md transition-shadow">
-      <CardHeader>
-        <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">
+    <Card className="shadow-sm border-zinc-200/50 hover:shadow-md transition-all duration-200 group bg-white">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+        <CardTitle className="text-[13px] font-semibold text-zinc-500 uppercase tracking-wider">
           {label}
-        </p>
-        <CardAction>
-          <div className="w-7 h-7 rounded flex items-center justify-center shrink-0 bg-gray-50 border border-gray-100">
-            {icon}
-          </div>
-        </CardAction>
+        </CardTitle>
+        <div className="w-9 h-9 rounded-full flex items-center justify-center bg-zinc-50 text-zinc-600 transition-colors group-hover:bg-zinc-100 group-hover:text-zinc-900">
+          {icon}
+        </div>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold text-gray-900 leading-none">
-          {value}
-        </p>
-        {extra}
-        {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+        <div className="text-3xl font-extrabold tracking-tight text-zinc-900">{value}</div>
+        {sub && <div className="text-[13px] font-medium text-zinc-500 mt-1">{sub}</div>}
       </CardContent>
     </Card>
   );
@@ -66,38 +57,10 @@ function StatCard({
 
 /* ── Rank badge ── */
 function RankBadge({ rank }: { rank: number }) {
-  const base = "w-6 h-6 rounded flex items-center justify-center text-[11px] font-bold";
-  if (rank === 1)
-    return <div className={`${base} bg-yellow-50 text-yellow-600 border border-yellow-200`}>1</div>;
-  if (rank === 2)
-    return <div className={`${base} bg-slate-50 text-slate-600 border border-slate-200`}>2</div>;
-  if (rank === 3)
-    return <div className={`${base} bg-orange-50 text-orange-600 border border-orange-200`}>3</div>;
-  return (
-    <div className={`${base} bg-gray-50 text-gray-500 border border-gray-200`}>
-      {rank}
-    </div>
-  );
-}
-
-/* ── Mini star row (server-safe, no client) ── */
-function MiniStars({ rating, max = 5 }: { rating: number; max?: number }) {
-  return (
-    <div className="flex items-center gap-0.5 mt-0.5">
-      {Array.from({ length: max }).map((_, i) => (
-        <Star
-          key={i}
-          strokeWidth={1.5}
-          className={`w-3.5 h-3.5 ${
-            i < Math.round(rating)
-              ? "fill-amber-400 text-amber-400"
-              : "fill-gray-200 text-gray-200"
-          }`}
-        />
-      ))}
-      <span className="text-[10px] text-gray-500 ml-1 font-semibold">{Number(rating).toFixed(1)}</span>
-    </div>
-  );
+  if (rank === 1) return <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">1st</span>;
+  if (rank === 2) return <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">2nd</span>;
+  if (rank === 3) return <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-bold bg-orange-100/80 text-orange-700/90 border border-orange-200">3rd</span>;
+  return <span className="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-bold bg-zinc-50 text-zinc-600 border border-zinc-100">{rank}th</span>;
 }
 
 export default async function OwnerDashboard() {
@@ -118,7 +81,7 @@ export default async function OwnerDashboard() {
 
   if (!shop) {
     return (
-      <div className="max-w-2xl mx-auto py-6 px-4 sm:py-12 sm:px-0">
+      <div className="max-w-2xl mx-auto py-8">
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4">
             <Store className="w-8 h-8 text-green-600" />
@@ -148,7 +111,7 @@ export default async function OwnerDashboard() {
         .select("*, profiles(full_name)")
         .eq("shop_id", shop.id)
         .order("created_at", { ascending: false })
-        .limit(4),
+        .limit(6),
       supabase.from("leaderboard_view").select("*"),
     ]);
 
@@ -163,439 +126,277 @@ export default async function OwnerDashboard() {
     leaderboard.findIndex((e) => e.shop_id === shop.id) + 1; // 0 = not ranked
   const isRanked = myLeaderboardRank > 0;
 
-  /* ── rank banner config ── */
-  const rankBannerConfig = isRanked
-    ? myLeaderboardRank === 1
-      ? {
-          bg: "bg-yellow-50 border-yellow-200",
-          text: "text-yellow-800",
-          sub: "text-yellow-600",
-          icon: <Crown className="w-4 h-4 text-yellow-600" strokeWidth={1.5} />,
-          label: "You are #1 on the leaderboard!",
-          badge: "bg-yellow-100 text-yellow-800",
-          badgeText: "🏆 Top Rated",
-        }
-      : myLeaderboardRank === 2
-      ? {
-          bg: "bg-slate-50 border-slate-200",
-          text: "text-slate-800",
-          sub: "text-slate-500",
-          icon: <Medal className="w-4 h-4 text-slate-600" strokeWidth={1.5} />,
-          label: `Ranked #${myLeaderboardRank} on the leaderboard`,
-          badge: "bg-white border border-slate-200 text-slate-700",
-          badgeText: "🥈 Silver Rank",
-        }
-      : myLeaderboardRank === 3
-      ? {
-          bg: "bg-orange-50 border-orange-200",
-          text: "text-orange-800",
-          sub: "text-orange-600",
-          icon: <Award className="w-4 h-4 text-orange-600" strokeWidth={1.5} />,
-          label: `Ranked #${myLeaderboardRank} on the leaderboard`,
-          badge: "bg-orange-100 text-orange-800",
-          badgeText: "🥉 Bronze Rank",
-        }
-      : {
-          bg: "bg-green-50 border-green-200",
-          text: "text-green-800",
-          sub: "text-green-600",
-          icon: <Trophy className="w-4 h-4 text-green-600" strokeWidth={1.5} />,
-          label: `Ranked #${myLeaderboardRank} on the leaderboard`,
-          badge: "bg-green-100 text-green-800",
-          badgeText: "✅ Ranked",
-        }
-    : null;
-
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full mx-auto space-y-6">
 
-      {/* ── Header ── */}
-      <Card className="py-0">
-        <CardHeader className="py-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="relative w-9 h-9 shrink-0">
-              {shop.image_url ? (
-                <Image
-                  src={shop.image_url}
-                  alt={shop.name}
-                  fill
-                  sizes="36px"
-                  className="object-cover rounded-lg"
-                />
+      {/* ── Dashboard Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+        <div className="flex items-center gap-5">
+          <Avatar className="w-20 h-20 border-2 border-white shadow-md rounded-xl">
+            {shop.image_url ? (
+              <AvatarImage src={shop.image_url} className="object-cover" />
+            ) : null}
+            <AvatarFallback className="rounded-xl bg-zinc-50 text-zinc-400">
+              <Store className="w-8 h-8" />
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col justify-center">
+            <h1 className="text-2xl font-extrabold tracking-tight text-zinc-900 mb-1.5">{shop.name}</h1>
+            <div className="flex items-center gap-2.5">
+              {shop.is_active ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-sm font-semibold text-emerald-700">Active</span>
+                </div>
               ) : (
-                <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center">
-                  <Store className="w-4 h-4 text-gray-400" strokeWidth={1.5} />
+                <div className="flex items-center gap-1.5">
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                  <span className="text-sm font-semibold text-rose-700">Inactive</span>
                 </div>
               )}
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-base font-semibold text-gray-900 leading-tight">
-                  {shop.name}
-                </h1>
-                {shop.is_active ? (
-                  <Badge variant="outline" className="text-[11px] text-green-700 border-green-200 bg-green-50">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
-                  </Badge>
-                ) : (
-                  <Badge variant="outline" className="text-[11px] text-red-700 border-red-200 bg-red-50">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span> Inactive
-                  </Badge>
-                )}
-              </div>
-              {(shop.description || true) && (
-                <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">
-                  {shop.description || "Shop Dashboard"}
-                </p>
+              {shop.description && (
+                <span className="text-sm font-medium text-zinc-500 hidden sm:inline-block border-l border-zinc-300 pl-2.5">
+                  {shop.description}
+                </span>
               )}
             </div>
           </div>
-          <CardAction>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/owner/shop">Edit Shop <ChevronRight className="w-3 h-3" strokeWidth={1.5} /></Link>
-            </Button>
-          </CardAction>
-        </CardHeader>
-      </Card>
-
-
-      {/* ── Rank Banner (if ranked) ── */}
-      {rankBannerConfig && (
-        <div
-          className={`border rounded-lg px-4 py-3 flex items-center justify-between gap-3 ${rankBannerConfig.bg}`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-white/60 flex items-center justify-center shrink-0">
-              {rankBannerConfig.icon}
-            </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <p className={`text-sm font-bold ${rankBannerConfig.text}`}>
-                  {rankBannerConfig.label}
-                </p>
-                <Badge variant="secondary" className={`text-[10px] font-semibold ${rankBannerConfig.badge}`}>
-                  {rankBannerConfig.badgeText}
-                </Badge>
-              </div>
-              <p className={`text-xs mt-0.5 opacity-80 ${rankBannerConfig.sub}`}>
-                Ranked among shops with 5+ reviews
-              </p>
-            </div>
-          </div>
-          <Link
-            href="/leaderboard"
-            className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-gray-900 bg-white px-2.5 py-1.5 rounded border border-gray-200/60 shadow-sm transition-all shrink-0"
-          >
-            Full Board <ArrowRight className="w-3.5 h-3.5 text-gray-400" strokeWidth={1.5} />
-          </Link>
         </div>
-      )}
+
+        <Link
+          href="/owner/shop"
+          className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-5 h-10 text-sm font-semibold text-white hover:bg-zinc-800 shadow-sm transition-all hover:shadow hover:-translate-y-0.5"
+        >
+          Edit Shop Details
+        </Link>
+      </div>
 
       {/* ── Progress to leaderboard ── */}
       {!isRanked && reviewCount < 5 && (
-        <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 flex items-center gap-3">
-          <Flame className="w-4 h-4 text-blue-500 shrink-0" strokeWidth={1.5} />
-          <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-semibold text-blue-800">
-              {5 - reviewCount} more {5 - reviewCount === 1 ? "review" : "reviews"} to unlock the leaderboard
-            </p>
-            <div className="mt-1 h-1 bg-blue-100/50 rounded-full overflow-hidden max-w-xs">
+        <div className="flex items-center gap-3 p-3 rounded-lg border border-amber-100 bg-amber-50/50 text-amber-900">
+          <Trophy className="w-4 h-4 text-amber-600 shrink-0" />
+          <p className="text-[13px] font-medium grow">
+            {5 - reviewCount} more {5 - reviewCount === 1 ? "review" : "reviews"} needed to unlock your leaderboard ranking.
+          </p>
+          <div className="flex items-center gap-2">
+            <div className="w-24 h-1.5 rounded-full bg-amber-100 overflow-hidden">
               <div
-                className="h-full bg-blue-500 rounded-full transition-all"
+                className="h-full bg-amber-500"
                 style={{ width: `${(reviewCount / 5) * 100}%` }}
               />
             </div>
+            <span className="text-[11px] font-bold tabular-nums">{reviewCount}/5</span>
           </div>
-          <span className="text-xs font-bold text-blue-700 shrink-0">{reviewCount}<span className="text-blue-400 font-medium">/5</span></span>
         </div>
       )}
 
       {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Avg Rating"
           value={avgRating > 0 ? Number(avgRating).toFixed(1) : "—"}
-          sub={avgRating > 0 ? "out of 5.0" : "no reviews yet"}
-          icon={<Star className="w-3.5 h-3.5 text-amber-500" strokeWidth={1.75} />}
-          extra={avgRating > 0 ? <MiniStars rating={Number(avgRating)} /> : undefined}
+          sub={avgRating > 0 ? "out of 5.0 maximum" : "No reviews yet"}
+          icon={<Star className="w-4 h-4" />}
         />
         <StatCard
-          label="Reviews"
-          value={reviewCount}
-          sub="total received"
-          icon={<MessageSquare className="w-3.5 h-3.5 text-blue-500" strokeWidth={1.75} />}
+          label="Total Reviews"
+          value={reviewCount.toLocaleString()}
+          sub="Feedback from students"
+          icon={<MessageSquare className="w-4 h-4" />}
         />
         <StatCard
           label="Menu Items"
-          value={menuCount}
-          sub="items listed"
-          icon={<UtensilsCrossed className="w-3.5 h-3.5 text-purple-500" strokeWidth={1.75} />}
+          value={menuCount.toLocaleString()}
+          sub="Active items listed"
+          icon={<UtensilsCrossed className="w-4 h-4" />}
         />
         <StatCard
-          label="LB Rank"
+          label="Leaderboard Rank"
           value={isRanked ? `#${myLeaderboardRank}` : "—"}
-          sub={isRanked ? `of ${leaderboard.length} shops` : "needs 5+ reviews"}
-          icon={<Trophy className="w-3.5 h-3.5 text-green-600" strokeWidth={1.75} />}
+          sub={isRanked ? `out of ${leaderboard.length} ranked shops` : "Unranked"}
+          icon={<Trophy className="w-4 h-4" />}
         />
       </div>
 
-      {/* ── Main Grid: Leaderboard | Actions | Reviews ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
+      {/* ── Main Grid ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* ── Leaderboard ── */}
-        <Card className="overflow-hidden flex flex-col py-0 gap-0">
-          <CardHeader className="border-b border-gray-100 py-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded bg-amber-50 border border-amber-100 flex items-center justify-center">
-                <Trophy className="w-3.5 h-3.5 text-amber-500" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h2 className="font-semibold text-gray-900 text-sm leading-none">Leaderboard</h2>
-                <p className="text-[11px] text-gray-400 mt-0.5">Top rated campus shops</p>
-              </div>
+        {/* Left Column: Leaderboard (Takes up 2/3 width on large screens) */}
+        <Card className="lg:col-span-2 shadow-sm border-zinc-200/60 flex flex-col bg-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b border-zinc-100">
+            <div>
+              <CardTitle className="text-lg font-bold text-zinc-900">Leaderboard</CardTitle>
+              <CardDescription className="text-[13px] font-medium text-zinc-500 mt-0.5">Top rated campus shops</CardDescription>
             </div>
-            <CardAction>
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/leaderboard">View Full <ArrowRight className="w-3 h-3" strokeWidth={1.5} /></Link>
-              </Button>
-            </CardAction>
+            <Link
+              href="/leaderboard"
+              className="inline-flex items-center justify-center rounded-lg px-3 h-8 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors"
+            >
+              View Rankings <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </Link>
           </CardHeader>
-
-          <CardContent className="p-0 flex-1 flex flex-col">
-          {leaderboard.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50/30">
-              <Trophy className="w-8 h-8 text-gray-200 mb-2" strokeWidth={1.5} />
-              <p className="text-sm text-gray-400">No ranked shops yet.</p>
-              <p className="text-xs text-gray-300 mt-1">Shops need 5+ reviews to appear here.</p>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-[1.5rem_1.5rem_1fr_4.5rem_2rem] items-center gap-2.5 px-4 py-2 bg-gray-50 border-b border-gray-100/50">
-                <span className="text-[10px] font-semibold text-gray-400 uppercase">#</span>
-                <span />
-                <span className="text-[10px] font-semibold text-gray-400 uppercase">Shop</span>
-                <span className="text-[10px] font-semibold text-gray-400 uppercase text-center">Rating</span>
-                <span className="text-[10px] font-semibold text-gray-400 uppercase text-right">Rev</span>
+          <CardContent className="flex-1 flex flex-col p-0">
+            {leaderboard.length === 0 ? (
+              <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+                <p className="text-sm text-muted-foreground mb-1">No ranked shops yet.</p>
+                <p className="text-xs text-muted-foreground">Shops need 5+ reviews to appear here.</p>
               </div>
-              <div className="divide-y divide-gray-50 flex-1">
-                {leaderboard.slice(0, 8).map((entry, index) => {
-                  const rank = index + 1;
-                  const isMe = entry.shop_id === shop.id;
-                  const barWidth = Math.round((Number(entry.avg_rating) / 5) * 100);
-                  return (
-                    <div
-                      key={entry.shop_id}
-                      className={`grid grid-cols-[1.5rem_1.5rem_1fr_4.5rem_2rem] items-center gap-2.5 px-4 py-2.5 transition-colors ${
-                        isMe
-                          ? "bg-green-50/50"
-                          : "hover:bg-gray-50/50"
-                      }`}
-                    >
-                      <RankBadge rank={rank} />
-                      <div className="relative w-6 h-6 rounded overflow-hidden bg-gray-100 ring-1 ring-gray-200/50 shrink-0">
-                        {entry.shop_image_url ? (
-                          <Image
-                            src={entry.shop_image_url}
-                            alt={entry.shop_name}
-                            fill
-                            className="object-cover"
-                            sizes="24px"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Store className="w-3 h-3 text-gray-300" strokeWidth={1.5} />
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="w-12 text-center">#</TableHead>
+                    <TableHead>Shop</TableHead>
+                    <TableHead className="text-center">Rating</TableHead>
+                    <TableHead className="text-center">Reviews</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {leaderboard.slice(0, 5).map((entry, index) => {
+                    const rank = index + 1;
+                    const isMe = entry.shop_id === shop.id;
+                    return (
+                      <TableRow
+                        key={entry.shop_id}
+                        className={`group transition-colors ${isMe ? "bg-indigo-50/40 hover:bg-indigo-50/60" : "hover:bg-zinc-50/80"
+                          }`}
+                      >
+                        <TableCell className="text-center text-sm">
+                          <RankBadge rank={rank} />
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-3">
+                            <Avatar className="w-8 h-8 rounded-md">
+                              {entry.shop_image_url ? (
+                                <AvatarImage src={entry.shop_image_url} className="object-cover" />
+                              ) : null}
+                              <AvatarFallback className="rounded-md bg-muted text-muted-foreground text-[10px]">
+                                <Store className="w-4 h-4" />
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-sm font-medium truncate">
+                                {entry.shop_name}
+                              </span>
+                              {isMe && (
+                                <span className="text-[10px] text-muted-foreground">Your Shop</span>
+                              )}
+                            </div>
                           </div>
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <p className={`text-xs font-semibold truncate ${isMe ? "text-green-700" : "text-gray-700"}`}>
-                            {entry.shop_name}
-                          </p>
-                          {isMe && (
-                            <span className="shrink-0 text-[8px] font-bold bg-green-100 text-green-700 px-1 py-0.5 rounded-sm leading-none">
-                              You
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                            <span className="text-sm font-medium tabular-nums">
+                              {Number(entry.avg_rating).toFixed(1)}
                             </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-0.5">
-                          {Array.from({ length: 1 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-3 h-3 fill-amber-400 text-amber-400`}
-                            />
-                          ))}
-                          <span className="text-[11px] text-gray-600 font-semibold ml-0.5">
-                            {Number(entry.avg_rating).toFixed(1)}
-                          </span>
-                        </div>
-                      </div>
-                      <span className="text-[11px] text-gray-400 text-right flex items-center justify-end gap-1">
-                        {entry.review_count}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center text-sm text-muted-foreground tabular-nums">
+                          {entry.review_count}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
 
-        {/* ── Quick Actions ── */}
-        <Card className="self-start py-0 gap-0">
-          <CardHeader className="border-b border-gray-100 py-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded bg-gray-50 border border-gray-200 flex items-center justify-center shrink-0">
-                <TrendingUp className="w-3.5 h-3.5 text-gray-600" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h2 className="text-sm font-semibold text-gray-900 leading-none">Quick Actions</h2>
-                <p className="text-[11px] text-gray-400 mt-0.5">Manage your shop</p>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="py-3">
-          <div className="space-y-1.5">
-            {[
-              {
-                href: "/owner/menu",
-                icon: <UtensilsCrossed className="w-4 h-4 text-gray-500" strokeWidth={1.5} />,
-                label: "Manage Menu",
-                sub: `${menuCount} item${menuCount !== 1 ? "s" : ""} listed`,
-                badge: menuCount > 0 ? String(menuCount) : null,
-              },
-              {
-                href: "/owner/reviews",
-                icon: <MessageSquare className="w-4 h-4 text-gray-500" strokeWidth={1.5} />,
-                label: "View Reviews",
-                sub: `${reviewCount} review${reviewCount !== 1 ? "s" : ""} received`,
-                badge: reviewCount > 0 ? String(reviewCount) : null,
-              },
-              {
-                href: "/owner/shop",
-                icon: <Store className="w-4 h-4 text-gray-500" strokeWidth={1.5} />,
-                label: "Shop Settings",
-                sub: "Update info & image",
-                badge: null,
-              },
-              {
-                href: "/leaderboard",
-                icon: <Trophy className="w-4 h-4 text-gray-500" strokeWidth={1.5} />,
-                label: "Full Leaderboard",
-                sub: `${leaderboard.length} shops ranked`,
-                badge: null,
-              },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-all group"
-              >
-                <div className={`w-8 h-8 rounded bg-white border border-gray-200 flex items-center justify-center shrink-0 shadow-sm group-hover:border-gray-300 transition-colors`}>
-                  {item.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-semibold text-gray-800 group-hover:text-gray-900 transition-colors">
-                    {item.label}
-                  </p>
-                  <p className="text-[11px] text-gray-400">{item.sub}</p>
-                </div>
-                {item.badge && (
-                  <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200`}>
-                    {item.badge}
-                  </span>
-                )}
-                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors shrink-0" strokeWidth={1.5} />
-              </Link>
-            ))}
-          </div>
-          </CardContent>
-        </Card>
+        {/* Right Column: Quick Actions & Reviews */}
+        <div className="space-y-6 flex flex-col">
 
-        {/* ── Recent Reviews ── */}
-        <Card className="overflow-hidden flex flex-col py-0 gap-0">
-          <CardHeader className="border-b border-gray-100 py-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded bg-blue-50 border border-blue-100 flex items-center justify-center">
-                <MessageSquare className="w-3.5 h-3.5 text-blue-500" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h2 className="text-sm font-semibold text-gray-900 leading-none">Recent Reviews</h2>
-                <p className="text-[11px] text-gray-400 mt-0.5">Latest feedback</p>
-              </div>
-            </div>
-            <CardAction>
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/owner/reviews">All Reviews <ArrowRight className="w-3 h-3" strokeWidth={1.5} /></Link>
-              </Button>
-            </CardAction>
-          </CardHeader>
-
-          <CardContent className="p-0 flex-1 flex flex-col">
-          {recentReviews.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50/30">
-              <MessageSquare className="w-8 h-8 text-gray-200 mb-2" strokeWidth={1.5} />
-              <p className="text-sm text-gray-400">No reviews yet.</p>
-              <p className="text-xs text-gray-300 mt-1">Reviews will appear here.</p>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-50 flex-1">
-              {recentReviews.map((review) => {
-                const profile = review.profiles as unknown as { full_name: string };
-                const name = profile?.full_name || "Anonymous";
-                const stars = review.rating;
-                const avatarStyle =
-                  stars >= 4
-                    ? "bg-green-50 text-green-700 border border-green-100"
-                    : stars === 3
-                    ? "bg-amber-50 text-amber-700 border border-amber-100"
-                    : "bg-red-50 text-red-700 border border-red-100";
-                return (
-                  <div
-                    key={review.id}
-                    className="px-4 py-3 hover:bg-gray-50/50 transition-colors"
+          {/* Quick Actions */}
+          <Card className="shadow-sm border-zinc-200/60 bg-white">
+            <CardHeader className="pb-4 border-b border-zinc-100">
+              <CardTitle className="text-base font-bold text-zinc-900">Quick Access</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 gap-2.5">
+                {[
+                  {
+                    href: "/owner/menu",
+                    icon: <UtensilsCrossed className="w-4 h-4" />,
+                    label: "Manage Menu",
+                    color: "bg-orange-50 text-orange-600 border-orange-100"
+                  },
+                  {
+                    href: "/owner/reviews",
+                    icon: <MessageSquare className="w-4 h-4" />,
+                    label: "View Feedback",
+                    color: "bg-blue-50 text-blue-600 border-blue-100"
+                  },
+                  {
+                    href: "/owner/shop",
+                    icon: <Store className="w-4 h-4" />,
+                    label: "Shop Settings",
+                    color: "bg-purple-50 text-purple-600 border-purple-100"
+                  },
+                ].map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center w-full justify-start h-auto p-3 rounded-xl border border-zinc-200/60 bg-white hover:border-zinc-300 hover:shadow-sm transition-all text-sm font-semibold group"
                   >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className={`w-6 h-6 rounded-full ${avatarStyle} flex items-center justify-center text-[10px] font-bold shrink-0`}>
-                          {name.charAt(0).toUpperCase()}
-                        </div>
-                        <div className="min-w-0">
-                          <span className="text-[13px] font-semibold text-gray-800 block truncate">
-                            {name}
-                          </span>
-                          <span className="text-[10px] text-gray-400">
-                            {formatDistanceToNow(review.created_at)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-0.5 shrink-0">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-2.5 h-2.5 ${
-                              i < stars
-                                ? "fill-amber-400 text-amber-400"
-                                : "fill-gray-200 text-gray-200"
-                            }`}
-                          />
-                        ))}
-                      </div>
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mr-3.5 border ${item.color}`}>
+                      {item.icon}
                     </div>
-                    <p className="text-[11px] text-gray-500 line-clamp-2 leading-relaxed pl-8">
-                      {review.body}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          </CardContent>
-        </Card>
+                    <span className="text-[13px] text-zinc-700 flex-1 text-left group-hover:text-zinc-900">{item.label}</span>
+                    <ChevronRight className="w-4 h-4 text-zinc-300 group-hover:text-zinc-500 shrink-0 transition-colors" />
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
+          {/* Recent Reviews Summary */}
+          <Card className="shadow-sm border-zinc-200/60 bg-white flex-1 flex flex-col">
+            <CardHeader className="pb-4 border-b border-zinc-100 flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-base font-bold text-zinc-900">Recent Ratings</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0 flex-1">
+              {recentReviews.length === 0 ? (
+                <div className="p-8 text-center flex flex-col items-center justify-center h-full">
+                  <div className="w-12 h-12 rounded-full bg-zinc-50 flex items-center justify-center mb-3">
+                    <MessageSquare className="w-6 h-6 text-zinc-300" />
+                  </div>
+                  <p className="text-[13px] font-medium text-zinc-500">No recent feedback.</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-zinc-100">
+                  {recentReviews.slice(0, 4).map((review) => {
+                    const profile = review.profiles as unknown as { full_name: string };
+                    const name = profile?.full_name || "Anonymous";
+                    const stars = review.rating;
+
+                    return (
+                      <div key={review.id} className="p-4 hover:bg-zinc-50/80 transition-colors">
+                        <div className="flex items-start justify-between mb-1.5">
+                          <p className="text-[13px] font-bold text-zinc-900 truncate pr-2">{name}</p>
+                          <div className="flex items-center gap-1 shrink-0 bg-amber-50 px-1.5 py-0.5 rounded text-amber-700">
+                            <span className="text-[11px] font-bold">{stars}.0</span>
+                            <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                          </div>
+                        </div>
+                        <p className="text-[13px] text-zinc-600 line-clamp-2 leading-relaxed font-medium">
+                          {review.body}
+                        </p>
+                        <p className="text-[11px] font-medium text-zinc-400 mt-2 tracking-wide uppercase">
+                          {formatDistanceToNow(review.created_at)}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+        </div>
       </div>
     </div>
   );

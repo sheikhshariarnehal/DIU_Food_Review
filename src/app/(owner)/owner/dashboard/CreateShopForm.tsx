@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { createOwnShop } from "@/app/actions/shop";
-import { Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,13 +28,10 @@ export default function CreateShopForm() {
 
   return (
     <Card className="w-full max-w-xl mx-auto border-gray-200 shadow-sm">
-      <CardHeader className="items-center text-center">
-        <div className="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center mx-auto">
-          <Store className="w-7 h-7 text-green-600" />
-        </div>
+      <CardHeader>
         <CardTitle className="text-xl">Shop Details</CardTitle>
         <CardDescription>
-          Your shop profile will be visible to students after creation.
+          Fill in the information below to create your shop profile.
         </CardDescription>
       </CardHeader>
       <CardContent>

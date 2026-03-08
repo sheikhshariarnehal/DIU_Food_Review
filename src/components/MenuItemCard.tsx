@@ -1,11 +1,7 @@
-"use client";
-
 import Image from "next/image";
+import { StatusBadge } from "./StatusBadge";
 import type { MenuItem } from "@/lib/types/database";
-import { UtensilsCrossed, Pencil, Trash2, AlertCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { BorderBeam } from "@/components/ui/border-beam";
+import { UtensilsCrossed } from "lucide-react";
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -22,74 +18,64 @@ export function MenuItemCard({
   onToggleStatus,
   onDelete,
 }: MenuItemCardProps) {
-  const isActive = item.status === "active";
-
   return (
-    <div className="bg-card rounded-xl border border-border overflow-hidden flex relative">
-      {isActive && (
-        <BorderBeam
-          size={40}
-          duration={10}
-          colorFrom="#16a34a"
-          colorTo="#22c55e"
-          borderWidth={1}
-        />
-      )}
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden flex">
       {/* Image */}
-      <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 shrink-0">
+      <div className="relative w-24 h-24 sm:w-28 sm:h-28 bg-gray-100 shrink-0">
         {item.image_url ? (
           <Image
             src={item.image_url}
             alt={item.name}
             fill
             className="object-cover"
-            sizes="96px"
+            sizes="112px"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <UtensilsCrossed className="w-6 h-6 text-gray-300" strokeWidth={1.5} />
+            <UtensilsCrossed className="w-8 h-8 text-gray-300" />
           </div>
         )}
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-3 py-2.5 sm:px-4 flex flex-col justify-between min-w-0">
+      <div className="flex-1 p-3 sm:p-4 flex flex-col justify-between min-w-0">
         <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <h4 className="font-semibold text-gray-900 text-sm">{item.name}</h4>
-            {isActive ? (
-              <Badge variant="outline" className="text-[10px] text-green-700 border-green-200 bg-green-50">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500" /> Active
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="text-[10px] text-amber-700 border-amber-200 bg-amber-50">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Stock Out
-              </Badge>
-            )}
+          <div className="flex items-center gap-2">
+            <h4 className="font-medium text-gray-900 text-sm truncate">
+              {item.name}
+            </h4>
+            <StatusBadge status={item.status === "active" ? "Active" : "Stock Out"} />
           </div>
           {item.description && (
-            <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{item.description}</p>
+            <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">
+              {item.description}
+            </p>
           )}
         </div>
-        <div className="flex items-center justify-between mt-2 gap-2">
-          <span className="text-sm font-bold text-green-600">৳{Number(item.price).toFixed(0)}</span>
+        <div className="flex items-center justify-between mt-2">
+          <span className="text-sm font-semibold text-green-600">
+            ৳{Number(item.price).toFixed(0)}
+          </span>
           {editable && (
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="xs"
+            <div className="flex items-center gap-2">
+              <button
                 onClick={() => onToggleStatus?.(item)}
-                className="text-[11px] text-muted-foreground"
+                className="text-xs text-gray-500 hover:text-amber-600 transition-colors"
               >
-                <AlertCircle className="w-3 h-3" />
-                {isActive ? "Stock Out" : "Activate"}
-              </Button>
-              <Button variant="ghost" size="icon-xs" onClick={() => onEdit?.(item)}>
-                <Pencil className="w-3 h-3 text-blue-500" />
-              </Button>
-              <Button variant="ghost" size="icon-xs" onClick={() => onDelete?.(item)}>
-                <Trash2 className="w-3 h-3 text-red-400" />
-              </Button>
+                {item.status === "active" ? "Mark Stock Out" : "Mark Active"}
+              </button>
+              <button
+                onClick={() => onEdit?.(item)}
+                className="text-xs text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => onDelete?.(item)}
+                className="text-xs text-red-500 hover:text-red-700 transition-colors"
+              >
+                Delete
+              </button>
             </div>
           )}
         </div>

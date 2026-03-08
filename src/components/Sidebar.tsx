@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Profile, UserRole } from "@/lib/types/database";
-import { BorderBeam } from "@/components/ui/border-beam";
 import {
   LayoutDashboard,
   Trophy,
@@ -48,25 +47,21 @@ export function Sidebar({ navItems, profile, role }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200 relative overflow-hidden">
-      <BorderBeam
-        size={80}
-        duration={12}
-        colorFrom="#16a34a"
-        colorTo="#86efac"
-        borderWidth={1.5}
-      />
+    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-gray-100 flex-shrink-0 z-40">
       {/* Brand */}
-      <div className="flex items-center gap-3 h-16 px-6 border-b border-gray-200">
-        <ChefHat className="w-8 h-8 text-green-600 drop-shadow-[0_0_6px_rgba(22,163,74,0.4)]" />
-        <div>
-          <h1 className="text-lg font-bold text-gray-900">DIU Food</h1>
-          <p className="text-xs text-gray-500">{roleLabels[role]}</p>
+      <div className="flex items-center gap-3 h-16 px-6 border-b border-gray-100">
+        <div className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center shrink-0">
+          <ChefHat className="w-5 h-5 text-white" />
+        </div>
+        <div className="flex flex-col">
+          <h1 className="text-[15px] font-bold text-gray-900 tracking-tight leading-none mb-0.5">DIU Food</h1>
+          <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">{roleLabels[role]}</p>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+        <p className="px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Main Menu</p>
         {navItems.map((item) => {
           const Icon = iconMap[item.icon];
           const isActive = pathname === item.href;
@@ -74,13 +69,12 @@ export function Sidebar({ navItems, profile, role }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-              }`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md text-[13px] font-medium transition-all ${isActive
+                  ? "bg-zinc-100/80 text-zinc-900"
+                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                }`}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className={`w-4 h-4 ${isActive ? "text-zinc-900" : "text-gray-400"}`} />
               {item.label}
             </Link>
           );
@@ -88,24 +82,24 @@ export function Sidebar({ navItems, profile, role }: SidebarProps) {
       </nav>
 
       {/* User Info + Logout */}
-      <div className="border-t border-gray-200 p-4">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-semibold text-sm">
+      <div className="border-t border-gray-100 p-4 bg-gray-50/50">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm shrink-0">
             {profile.full_name?.charAt(0)?.toUpperCase() || "U"}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-[13px] font-bold text-gray-900 truncate">
               {profile.full_name || "User"}
             </p>
-            <p className="text-xs text-gray-500 truncate">{profile.email}</p>
+            <p className="text-[11px] font-medium text-gray-500 truncate">{profile.email}</p>
           </div>
         </div>
         <button
           type="button"
           onClick={() => { window.location.href = "/api/signout"; }}
-          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 w-full px-3 py-2 text-xs font-semibold text-gray-600 border border-gray-200 bg-white hover:text-red-600 hover:border-red-200 hover:bg-red-50 rounded-md transition-all shadow-sm"
         >
-          <LogOut className="w-4 h-4" />
+          <LogOut className="w-3.5 h-3.5" />
           Sign Out
         </button>
       </div>
