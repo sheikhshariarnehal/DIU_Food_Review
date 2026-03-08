@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import ShopSettingsClient from "./ShopSettingsClient";
 import { Store } from "lucide-react";
 import Link from "next/link";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default async function OwnerShopPage() {
   const supabase = await createClient();
@@ -22,20 +24,23 @@ export default async function OwnerShopPage() {
 
   if (!shop) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-16">
-        <Store className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
-          No Shop Yet
-        </h2>
-        <p className="text-gray-500 text-sm mb-6">
-          You haven&apos;t created your shop yet. Go to the dashboard to set up your shop.
-        </p>
-        <Link
-          href="/owner/dashboard"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
-        >
-          Go to Dashboard
-        </Link>
+      <div className="max-w-md mx-auto py-12 px-4 sm:px-0">
+        <Card className="text-center">
+          <CardHeader className="items-center pb-2">
+            <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-1">
+              <Store className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
+            </div>
+            <CardTitle>No Shop Yet</CardTitle>
+            <CardDescription>
+              Head to the dashboard to create your shop and start receiving reviews.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
+              <Link href="/owner/dashboard">Go to Dashboard</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

@@ -1,8 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { StarRating } from "./StarRating";
 import { MapPin } from "lucide-react";
 import type { ShopWithRating } from "@/lib/types/database";
+import { MagicCard } from "@/components/ui/magic-card";
 
 interface ShopCardProps {
   shop: ShopWithRating;
@@ -11,7 +14,13 @@ interface ShopCardProps {
 export function ShopCard({ shop }: ShopCardProps) {
   return (
     <Link href={`/shops/${shop.id}`}>
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group">
+      <MagicCard
+        className="rounded-xl"
+        gradientColor="#dcfce7"
+        gradientFrom="#16a34a"
+        gradientTo="#22c55e"
+        gradientOpacity={0.12}
+      >
         {/* Image */}
         <div className="relative w-full h-40 bg-gray-100">
           {shop.image_url ? (
@@ -47,7 +56,7 @@ export function ShopCard({ shop }: ShopCardProps) {
             </span>
           </div>
         </div>
-      </div>
+      </MagicCard>
     </Link>
   );
 }

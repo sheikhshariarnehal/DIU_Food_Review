@@ -78,7 +78,7 @@ export default async function OwnerLayout({
         role="shop_owner"
       />
 
-      <main className="lg:ml-64 min-h-screen pb-20 lg:pb-0">
+      <main className="lg:ml-64 min-h-screen pb-16 lg:pb-0">
         <div className="p-4 sm:p-5 lg:p-5">{children}</div>
       </main>
 

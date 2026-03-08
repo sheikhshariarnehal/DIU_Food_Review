@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Profile, UserRole } from "@/lib/types/database";
+import { BorderBeam } from "@/components/ui/border-beam";
 import {
   LayoutDashboard,
   Trophy,
@@ -47,10 +48,17 @@ export function Sidebar({ navItems, profile, role }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200">
+    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200 relative overflow-hidden">
+      <BorderBeam
+        size={80}
+        duration={12}
+        colorFrom="#16a34a"
+        colorTo="#86efac"
+        borderWidth={1.5}
+      />
       {/* Brand */}
       <div className="flex items-center gap-3 h-16 px-6 border-b border-gray-200">
-        <ChefHat className="w-8 h-8 text-green-600" />
+        <ChefHat className="w-8 h-8 text-green-600 drop-shadow-[0_0_6px_rgba(22,163,74,0.4)]" />
         <div>
           <h1 className="text-lg font-bold text-gray-900">DIU Food</h1>
           <p className="text-xs text-gray-500">{roleLabels[role]}</p>

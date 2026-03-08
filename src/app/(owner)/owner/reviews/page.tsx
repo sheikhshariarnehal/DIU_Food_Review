@@ -4,6 +4,7 @@ import { ReviewCard } from "@/components/ReviewCard";
 import { ReplyForm } from "@/components/ReplyForm";
 import type { ReviewWithProfile } from "@/lib/types/database";
 import { MessageSquare } from "lucide-react";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default async function OwnerReviewsPage() {
   const supabase = await createClient();
@@ -23,8 +24,13 @@ export default async function OwnerReviewsPage() {
 
   if (!shop) {
     return (
-      <div className="max-w-3xl mx-auto text-center py-16">
-        <p className="text-gray-500">No shop assigned to your account.</p>
+      <div className="max-w-3xl mx-auto py-12 px-4 sm:px-0">
+        <Card className="text-center">
+          <CardContent className="py-12 flex flex-col items-center">
+            <MessageSquare className="w-8 h-8 text-gray-200 mb-3" strokeWidth={1.5} />
+            <p className="text-sm text-gray-400">No shop assigned to your account.</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -36,8 +42,6 @@ export default async function OwnerReviewsPage() {
     .eq("shop_id", shop.id)
     .order("created_at", { ascending: false });
 
-  // Supabase may return review_replies as a single object (not array) when a
-  // UNIQUE constraint exists on review_id. Normalize to always be an array.
   const reviews = reviewsRaw?.map((r: any) => ({
     ...r,
     review_replies: r.review_replies
@@ -48,21 +52,35 @@ export default async function OwnerReviewsPage() {
   }));
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Reviews</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Customer reviews for {shop.name}
-        </p>
-      </div>
+    <div className="max-w-3xl mx-auto space-y-4">
+
+      {/* ── Page Header ── */}
+      <Card className="py-0">
+        <CardHeader className="py-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+              <MessageSquare className="w-4 h-4 text-gray-500" strokeWidth={1.5} />
+            </div>
+            <div>
+              <CardTitle className="text-base font-semibold">Customer Reviews</CardTitle>
+              <CardDescription className="text-xs mt-0.5">
+                {reviews?.length ?? 0} review{(reviews?.length ?? 0) !== 1 ? "s" : ""} for {shop.name}
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
 
       {!reviews || reviews.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <MessageSquare className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-sm text-gray-500">No reviews yet.</p>
-        </div>
+        <Card>
+          <CardContent className="py-12 flex flex-col items-center justify-center text-center">
+            <MessageSquare className="w-8 h-8 text-gray-200 mb-3" strokeWidth={1.5} />
+            <p className="text-sm text-gray-400">No reviews yet.</p>
+            <p className="text-xs text-gray-300 mt-1">Reviews from students will appear here.</p>
+          </CardContent>
+        </Card>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {(reviews as unknown as ReviewWithProfile[]).map((review) => (
             <ReviewCard
               key={review.id}

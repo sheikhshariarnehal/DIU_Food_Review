@@ -1,3 +1,7 @@
+"use client";
+
+import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
+
 type BadgeVariant = "Active" | "Stock Out" | "Pending" | "Suspended" | "Verified";
 
 const variantStyles: Record<BadgeVariant, string> = {
@@ -8,16 +12,26 @@ const variantStyles: Record<BadgeVariant, string> = {
   Verified: "bg-blue-100 text-blue-700",
 };
 
+const shinyVariants: BadgeVariant[] = ["Active", "Verified"];
+
 interface StatusBadgeProps {
   status: BadgeVariant;
 }
 
 export function StatusBadge({ status }: StatusBadgeProps) {
+  const isShiny = shinyVariants.includes(status);
+
   return (
     <span
       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${variantStyles[status]}`}
     >
-      {status}
+      {isShiny ? (
+        <AnimatedShinyText className="text-[11px] font-medium">
+          {status}
+        </AnimatedShinyText>
+      ) : (
+        status
+      )}
     </span>
   );
 }

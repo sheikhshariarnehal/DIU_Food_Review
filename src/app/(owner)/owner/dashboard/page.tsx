@@ -19,6 +19,9 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import CreateShopForm from "./CreateShopForm";
+import { Card, CardHeader, CardContent, CardAction } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { LeaderboardEntry } from "@/lib/types/database";
 import { formatDistanceToNow } from "@/lib/utils/date";
 
@@ -39,21 +42,25 @@ function StatCard({
   extra?: React.ReactNode;
 }) {
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 p-4 flex flex-col gap-1 shadow-sm hover:shadow-md transition-shadow`}>
-      <div className="flex items-start justify-between">
+    <Card className="hover:shadow-md transition-shadow">
+      <CardHeader>
         <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">
           {label}
         </p>
-        <div className={`w-7 h-7 rounded flex items-center justify-center shrink-0 bg-gray-50 border border-gray-100`}>
-          {icon}
-        </div>
-      </div>
-      <p className="text-2xl font-bold text-gray-900 leading-none mt-1">
-        {value}
-      </p>
-      {extra}
-      {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
-    </div>
+        <CardAction>
+          <div className="w-7 h-7 rounded flex items-center justify-center shrink-0 bg-gray-50 border border-gray-100">
+            {icon}
+          </div>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <p className="text-2xl font-bold text-gray-900 leading-none">
+          {value}
+        </p>
+        {extra}
+        {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -111,7 +118,7 @@ export default async function OwnerDashboard() {
 
   if (!shop) {
     return (
-      <div className="max-w-2xl mx-auto py-8">
+      <div className="max-w-2xl mx-auto py-6 px-4 sm:py-12 sm:px-0">
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4">
             <Store className="w-8 h-8 text-green-600" />
@@ -203,56 +210,53 @@ export default async function OwnerDashboard() {
     <div className="w-full space-y-4">
 
       {/* ── Header ── */}
-      <div className="bg-white rounded-lg border border-gray-100 shadow-sm px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 shrink-0">
-            {shop.image_url ? (
-              <Image
-                src={shop.image_url}
-                alt={shop.name}
-                fill
-                sizes="40px"
-                className="object-cover rounded-lg"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center border border-gray-200">
-                <Store className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
-              </div>
-            )}
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-lg font-bold text-gray-900 leading-tight">
-                {shop.name}
-              </h1>
-              {shop.is_active ? (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white text-gray-600 text-[11px] font-medium rounded border border-gray-200 shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
-                </span>
+      <Card className="py-0">
+        <CardHeader className="py-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="relative w-9 h-9 shrink-0">
+              {shop.image_url ? (
+                <Image
+                  src={shop.image_url}
+                  alt={shop.name}
+                  fill
+                  sizes="36px"
+                  className="object-cover rounded-lg"
+                />
               ) : (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white text-gray-600 text-[11px] font-medium rounded border border-gray-200 shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span> Inactive
-                </span>
+                <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <Store className="w-4 h-4 text-gray-400" strokeWidth={1.5} />
+                </div>
               )}
             </div>
-            {shop.description ? (
-              <p className="text-xs text-gray-400 mt-0.5 line-clamp-1 max-w-lg">
-                {shop.description}
-              </p>
-            ) : (
-              <p className="text-xs text-gray-400 mt-0.5">Shop Dashboard</p>
-            )}
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-base font-semibold text-gray-900 leading-tight">
+                  {shop.name}
+                </h1>
+                {shop.is_active ? (
+                  <Badge variant="outline" className="text-[11px] text-green-700 border-green-200 bg-green-50">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-[11px] text-red-700 border-red-200 bg-red-50">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span> Inactive
+                  </Badge>
+                )}
+              </div>
+              {(shop.description || true) && (
+                <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">
+                  {shop.description || "Shop Dashboard"}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="shrink-0">
-          <Link
-            href="/owner/shop"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded hover:bg-gray-50 transition-colors shadow-sm"
-          >
-            Edit Shop <ChevronRight className="w-3.5 h-3.5 text-gray-400" strokeWidth={1.5} />
-          </Link>
-        </div>
-      </div>
+          <CardAction>
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/owner/shop">Edit Shop <ChevronRight className="w-3 h-3" strokeWidth={1.5} /></Link>
+            </Button>
+          </CardAction>
+        </CardHeader>
+      </Card>
 
 
       {/* ── Rank Banner (if ranked) ── */}
@@ -269,9 +273,9 @@ export default async function OwnerDashboard() {
                 <p className={`text-sm font-bold ${rankBannerConfig.text}`}>
                   {rankBannerConfig.label}
                 </p>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${rankBannerConfig.badge}`}>
+                <Badge variant="secondary" className={`text-[10px] font-semibold ${rankBannerConfig.badge}`}>
                   {rankBannerConfig.badgeText}
-                </span>
+                </Badge>
               </div>
               <p className={`text-xs mt-0.5 opacity-80 ${rankBannerConfig.sub}`}>
                 Ranked among shops with 5+ reviews
@@ -307,7 +311,7 @@ export default async function OwnerDashboard() {
       )}
 
       {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
         <StatCard
           label="Avg Rating"
           value={avgRating > 0 ? Number(avgRating).toFixed(1) : "—"}
@@ -336,28 +340,28 @@ export default async function OwnerDashboard() {
       </div>
 
       {/* ── Main Grid: Leaderboard | Actions | Reviews ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
 
         {/* ── Leaderboard ── */}
-        <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <Card className="overflow-hidden flex flex-col py-0 gap-0">
+          <CardHeader className="border-b border-gray-100 py-3">
             <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded bg-amber-50 border border-amber-100 flex items-center justify-center">
-              <Trophy className="w-3.5 h-3.5 text-amber-500" strokeWidth={1.5} />
+              <div className="w-7 h-7 rounded bg-amber-50 border border-amber-100 flex items-center justify-center">
+                <Trophy className="w-3.5 h-3.5 text-amber-500" strokeWidth={1.5} />
               </div>
               <div>
                 <h2 className="font-semibold text-gray-900 text-sm leading-none">Leaderboard</h2>
                 <p className="text-[11px] text-gray-400 mt-0.5">Top rated campus shops</p>
               </div>
             </div>
-            <Link
-              href="/leaderboard"
-              className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 font-medium transition-colors"
-            >
-              View Full <ArrowRight className="w-3 h-3" strokeWidth={1.5} />
-            </Link>
-          </div>
+            <CardAction>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/leaderboard">View Full <ArrowRight className="w-3 h-3" strokeWidth={1.5} /></Link>
+              </Button>
+            </CardAction>
+          </CardHeader>
 
+          <CardContent className="p-0 flex-1 flex flex-col">
           {leaderboard.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50/30">
               <Trophy className="w-8 h-8 text-gray-200 mb-2" strokeWidth={1.5} />
@@ -383,8 +387,8 @@ export default async function OwnerDashboard() {
                       key={entry.shop_id}
                       className={`grid grid-cols-[1.5rem_1.5rem_1fr_4.5rem_2rem] items-center gap-2.5 px-4 py-2.5 transition-colors ${
                         isMe
-                          ? "bg-green-50/50 border-l-[2px] border-l-green-500"
-                          : "hover:bg-gray-50/50 border-l-[2px] border-l-transparent"
+                          ? "bg-green-50/50"
+                          : "hover:bg-gray-50/50"
                       }`}
                     >
                       <RankBadge rank={rank} />
@@ -437,19 +441,23 @@ export default async function OwnerDashboard() {
               </div>
             </>
           )}
-        </div>
+          </CardContent>
+        </Card>
 
         {/* ── Quick Actions ── */}
-        <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 self-start">
-          <div className="flex items-center gap-2.5 mb-3">
-            <div className="w-7 h-7 rounded bg-gray-50 border border-gray-200 flex items-center justify-center shrink-0">
-              <TrendingUp className="w-3.5 h-3.5 text-gray-600" strokeWidth={1.5} />
+        <Card className="self-start py-0 gap-0">
+          <CardHeader className="border-b border-gray-100 py-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded bg-gray-50 border border-gray-200 flex items-center justify-center shrink-0">
+                <TrendingUp className="w-3.5 h-3.5 text-gray-600" strokeWidth={1.5} />
+              </div>
+              <div>
+                <h2 className="text-sm font-semibold text-gray-900 leading-none">Quick Actions</h2>
+                <p className="text-[11px] text-gray-400 mt-0.5">Manage your shop</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-sm font-semibold text-gray-900 leading-none">Quick Actions</h2>
-              <p className="text-[11px] text-gray-400 mt-0.5">Manage your shop</p>
-            </div>
-          </div>
+          </CardHeader>
+          <CardContent className="py-3">
           <div className="space-y-1.5">
             {[
               {
@@ -504,28 +512,29 @@ export default async function OwnerDashboard() {
               </Link>
             ))}
           </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* ── Recent Reviews ── */}
-        <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <Card className="overflow-hidden flex flex-col py-0 gap-0">
+          <CardHeader className="border-b border-gray-100 py-3">
             <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded bg-blue-50 border border-blue-100 flex items-center justify-center">
-              <MessageSquare className="w-3.5 h-3.5 text-blue-500" strokeWidth={1.5} />
+              <div className="w-7 h-7 rounded bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <MessageSquare className="w-3.5 h-3.5 text-blue-500" strokeWidth={1.5} />
               </div>
               <div>
                 <h2 className="text-sm font-semibold text-gray-900 leading-none">Recent Reviews</h2>
                 <p className="text-[11px] text-gray-400 mt-0.5">Latest feedback</p>
               </div>
             </div>
-            <Link
-              href="/owner/reviews"
-              className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900 font-medium transition-colors"
-            >
-              All Reviews <ArrowRight className="w-3 h-3" strokeWidth={1.5} />
-            </Link>
-          </div>
+            <CardAction>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/owner/reviews">All Reviews <ArrowRight className="w-3 h-3" strokeWidth={1.5} /></Link>
+              </Button>
+            </CardAction>
+          </CardHeader>
 
+          <CardContent className="p-0 flex-1 flex flex-col">
           {recentReviews.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50/30">
               <MessageSquare className="w-8 h-8 text-gray-200 mb-2" strokeWidth={1.5} />
@@ -538,12 +547,6 @@ export default async function OwnerDashboard() {
                 const profile = review.profiles as unknown as { full_name: string };
                 const name = profile?.full_name || "Anonymous";
                 const stars = review.rating;
-                const ratingColor =
-                  stars >= 4
-                    ? "border-l-green-400"
-                    : stars === 3
-                    ? "border-l-amber-400"
-                    : "border-l-red-400";
                 const avatarStyle =
                   stars >= 4
                     ? "bg-green-50 text-green-700 border border-green-100"
@@ -553,7 +556,7 @@ export default async function OwnerDashboard() {
                 return (
                   <div
                     key={review.id}
-                    className={`px-4 py-3 border-l-[2px] ${ratingColor} hover:bg-gray-50/50 transition-colors`}
+                    className="px-4 py-3 hover:bg-gray-50/50 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-2 min-w-0">
@@ -590,7 +593,8 @@ export default async function OwnerDashboard() {
               })}
             </div>
           )}
-        </div>
+          </CardContent>
+        </Card>
 
       </div>
     </div>
