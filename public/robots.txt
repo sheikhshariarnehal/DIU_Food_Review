@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /owner
+Disallow: /auth
+
+# Host
+Host: https://diu-food-review.vercel.app
+
+# Sitemaps
+Sitemap: https://diu-food-review.vercel.app/sitemap.xml
