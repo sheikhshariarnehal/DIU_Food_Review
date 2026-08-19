@@ -55,7 +55,7 @@ export function MenuItemCard({
     setReviewCount(item.review_count ?? 0);
   }, [item.avg_rating, item.review_count]);
 
-  return (\
+  return (
     <>
       <Card className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white pt-0 shadow-sm transition-all duration-300 hover:shadow-md hover:border-zinc-300">
         {/* Image */}
@@ -90,7 +90,7 @@ export function MenuItemCard({
           >
             <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
             <span>{avgRating > 0 ? avgRating.toFixed(1) : "New"}</span>
-            {reviewCount > 0 && (\
+            {reviewCount > 0 && (
               <span className="text-xs text-zinc-300 font-normal">
                 ({reviewCount})
               </span>
@@ -107,11 +107,11 @@ export function MenuItemCard({
               </h4>
             </div>
 
-            {item.description ? (\
+            {item.description ? (
               <p className="mt-1 text-xs text-zinc-500 line-clamp-2 leading-relaxed">
                 {item.description}
               </p>
-            ) : (\
+            ) : (
               <p className="mt-1 text-xs text-zinc-300 italic">No description provided</p>
             )}
           </div>
@@ -121,20 +121,20 @@ export function MenuItemCard({
               ৳{Number(item.price).toFixed(0)}
             </span>
 
-            {editable ? (\
+            {editable ? (
               <div className="flex items-center gap-1">
                 <Tooltip>
                   <TooltipTrigger
                     onClick={() => onToggleStatus?.(item)}
-                    className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${\
+                    className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${
                       isActive
                         ? "text-amber-500 hover:bg-amber-50 hover:text-amber-700"
                         : "text-emerald-500 hover:bg-emerald-50 hover:text-emerald-700"
                     }`}
                   >
-                    {isActive ? (\
+                    {isActive ? (
                       <Archive className="h-3.5 w-3.5" />
-                    ) : (\
+                    ) : (
                       <ArchiveRestore className="h-3.5 w-3.5" />
                     )}
                   </TooltipTrigger>
@@ -167,7 +167,7 @@ export function MenuItemCard({
                   </TooltipContent>
                 </Tooltip>
               </div>
-            ) : (\
+            ) : (
               <button
                 type="button"
                 onClick={() => setModalOpen(true)}

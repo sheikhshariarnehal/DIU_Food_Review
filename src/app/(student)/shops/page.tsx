@@ -86,7 +86,7 @@ export default async function StudentDashboard() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {(topShops as LeaderboardEntry[]).map((entry, index) => (\
+            {(topShops as LeaderboardEntry[]).map((entry, index) => (
               <Link
                 key={entry.shop_id}
                 href={`/shops/${entry.shop_id}`}

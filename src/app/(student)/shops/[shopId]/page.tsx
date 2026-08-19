@@ -132,7 +132,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
 
   return (
     <div className="w-full space-y-6 pb-12">
-      {/* ── Breadcrumb Navigation ── */}
+      {/* Breadcrumb Navigation */}
       <div className="flex items-center gap-2">
         <Link
           href="/shops"
@@ -143,7 +143,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
         </Link>
       </div>
 
-      {/* ── Hero Stall Card (Distilled Layout) ── */}
+      {/* Hero Stall Card */}
       <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xs">
         <div className="relative aspect-[21/9] w-full min-h-[180px] sm:min-h-[240px] overflow-hidden bg-gray-100">
           <SafeImage
@@ -156,7 +156,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-          
+
           <div className="absolute bottom-4 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 text-white">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div className="space-y-1">
@@ -167,10 +167,10 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
                 <h1 className="text-2xl font-black tracking-tight sm:text-3xl text-white drop-shadow-xs">
                   {shop.name}
                 </h1>
-                {shop.description && (\
+                {shop.description && (
                   <p className="max-w-2xl text-xs text-white/80 line-clamp-2">
                     {shop.description}
-                  </p>\
+                  </p>
                 )}
               </div>
 
@@ -239,9 +239,9 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
         }}
       />
 
-      {/* ── 2-Column Responsive Layout: Menu (Left 3 cols) & Reviews (Right 2 cols) ── */}
+      {/* 2-Column Layout: Menu (Left) & Reviews (Right) */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-        {/* Left Column: Menu Items Catalog */}
+        {/* Left Column: Menu Items */}
         <section className="space-y-4 lg:col-span-3">
           <div className="flex items-center justify-between border-b border-gray-100 pb-3">
             <div>
@@ -258,7 +258,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
             </span>
           </div>
 
-          {menuItems.length === 0 ? (\
+          {menuItems.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-8 text-center">
               <UtensilsCrossed className="mx-auto h-8 w-8 text-gray-300 mb-2" />
               <p className="text-sm font-bold text-gray-800">No dishes on the menu yet</p>
@@ -266,7 +266,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
                 The stall owner hasn&apos;t added menu items yet.
               </p>
             </div>
-          ) : (\
+          ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {menuItems.map((item) => (
                 <MenuItemCard
@@ -281,16 +281,14 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
           )}
         </section>
 
-        {/* Right Column: Student Reviews & Submission */}
+        {/* Right Column: Student Reviews */}
         <section className="space-y-5 lg:col-span-2">
-          {/* Review Submission Form (For Active Students) */}
-          {isStudent && (\
+          {isStudent && (
             <div>
               <ReviewForm shopId={shopId} existingReview={existingReview} />
             </div>
           )}
 
-          {/* Customer Reviews Stream */}
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>
@@ -304,13 +302,13 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
               </div>
             </div>
 
-            {reviews && reviews.length > 0 ? (\
+            {reviews && reviews.length > 0 ? (
               <div className="space-y-3">
                 {(reviews as unknown as ReviewWithProfile[]).map((review) => (
                   <ReviewCard key={review.id} review={review} />
                 ))}
               </div>
-            ) : (\
+            ) : (
               <div className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-2xs">
                 <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-2xl bg-gray-50 text-gray-300">
                   <MessageSquare className="h-5 w-5" />

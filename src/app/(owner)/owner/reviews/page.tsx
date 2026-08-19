@@ -1,10 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { OwnerReviewsClient } from "./OwnerReviewsClient";
+import type { ReviewWithProfile } from "@/lib/types/database";
+import { Store } from "lucide-react";
 import Link from "next/link";
-import { MessageSquare } from "lucide-react";
 
-export const revalidate = 0; // Fresh reviews
+export const revalidate = 30;
 
 export default async function OwnerReviewsPage() {
   const supabase = await createClient();
@@ -24,17 +25,17 @@ export default async function OwnerReviewsPage() {
 
   if (!shop) {
     return (
-      <div className="mx-auto max-w-2xl py-12 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
-          <MessageSquare className="h-7 w-7" />
+      <div className="mx-auto max-w-2xl py-16 text-center">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-50 text-gray-400">
+          <Store className="h-6 w-6" />
         </div>
-        <h2 className="text-xl font-bold text-gray-900">No Shop Found</h2>
-        <p className="mt-1 text-sm text-gray-500">
-          You need to create a shop before managing customer reviews.
+        <h2 className="text-lg font-bold text-gray-900">No Shop Assigned</h2>
+        <p className="mt-1 text-xs text-gray-500">
+          Please set up your shop profile before managing customer reviews.
         </p>
         <Link
           href="/owner/dashboard"
-          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-gray-800"
+          className="mt-4 inline-flex items-center rounded-xl bg-gray-900 px-4 py-2 text-xs font-semibold text-white hover:bg-gray-800"
         >
           Go to Dashboard
         </Link>
@@ -57,11 +58,7 @@ export default async function OwnerReviewsPage() {
         ? r.review_replies
         : [r.review_replies]
       : [],
-  }));
+  })) as ReviewWithProfile[];
 
-  return (
-    <div className="w-full pb-10">
-      <OwnerReviewsClient shopId={shop.id} initialReviews={reviews} />
-    </div>
-  );
+  return <OwnerReviewsClient shopName={shop.name} reviews={reviews} />;
 }
