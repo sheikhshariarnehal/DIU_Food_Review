@@ -54,6 +54,7 @@ export async function submitMenuItemReview(
   }
   revalidatePath("/shops");
   revalidatePath("/owner/menu");
+  revalidatePath("/owner/dashboard");
 
   return { success: true };
 }
@@ -96,6 +97,7 @@ export async function updateMenuItemReview(
   }
   revalidatePath("/shops");
   revalidatePath("/owner/menu");
+  revalidatePath("/owner/dashboard");
 
   return { success: true };
 }
@@ -126,6 +128,84 @@ export async function deleteMenuItemReview(reviewId: string, shopId: string) {
   }
   revalidatePath("/shops");
   revalidatePath("/owner/menu");
+  revalidatePath("/owner/dashboard");
+
+  return { success: true };
+}
+
+export async function submitMenuItemReviewReply(
+  reviewId: string,
+  reply: string,
+  shopId?: string
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "You must be logged in as a shop owner to reply." };
+  }
+
+  if (!reply.trim()) {
+    return { error: "Reply body cannot be empty." };
+  }
+
+  const { error } = await supabase
+    .from("menu_item_reviews")
+    .update({
+      reply: reply.trim(),
+      reply_created_at: new Date().toISOString(),
+    })
+    .eq("id", reviewId);
+
+  if (error) {
+    console.error("Error submitting menu item review reply:", error);
+    return { error: "Failed to submit reply. Only shop owners can reply." };
+  }
+
+  if (shopId) {
+    revalidatePath(`/shops/${shopId}`);
+  }
+  revalidatePath("/owner/menu");
+  revalidatePath("/owner/reviews");
+  revalidatePath("/owner/dashboard");
+
+  return { success: true };
+}
+
+export async function deleteMenuItemReviewReply(
+  reviewId: string,
+  shopId?: string
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "You must be logged in." };
+  }
+
+  const { error } = await supabase
+    .from("menu_item_reviews")
+    .update({
+      reply: null,
+      reply_created_at: null,
+    })
+    .eq("id", reviewId);
+
+  if (error) {
+    return { error: "Failed to remove reply." };
+  }
+
+  if (shopId) {
+    revalidatePath(`/shops/${shopId}`);
+  }
+  revalidatePath("/owner/menu");
+  revalidatePath("/owner/reviews");
 
   return { success: true };
 }

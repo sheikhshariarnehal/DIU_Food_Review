@@ -86,7 +86,7 @@ export default async function StudentDashboard() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {(topShops as LeaderboardEntry[]).map((entry, index) => (
+            {(topShops as LeaderboardEntry[]).map((entry, index) => (\
               <Link
                 key={entry.shop_id}
                 href={`/shops/${entry.shop_id}`}
@@ -94,7 +94,7 @@ export default async function StudentDashboard() {
               >
                 <div className="mb-1.5 flex items-center gap-2">
                   <span
-                    className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-bold ${rankColors[index]}`}
+                    className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-xs font-bold ${rankColors[index]}`}
                   >
                     {index + 1}
                   </span>
