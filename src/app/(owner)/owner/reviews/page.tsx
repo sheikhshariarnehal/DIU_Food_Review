@@ -1,9 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { ReviewCard } from "@/components/ReviewCard";
-import { ReplyForm } from "@/components/ReplyForm";
-import type { ReviewWithProfile } from "@/lib/types/database";
+import { OwnerReviewsClient } from "./OwnerReviewsClient";
+import Link from "next/link";
 import { MessageSquare } from "lucide-react";
+
+export const revalidate = 0; // Fresh reviews
 
 export default async function OwnerReviewsPage() {
   const supabase = await createClient();
@@ -23,8 +24,20 @@ export default async function OwnerReviewsPage() {
 
   if (!shop) {
     return (
-      <div className="max-w-3xl mx-auto text-center py-16">
-        <p className="text-gray-500">No shop assigned to your account.</p>
+      <div className="mx-auto max-w-2xl py-12 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+          <MessageSquare className="h-7 w-7" />
+        </div>
+        <h2 className="text-xl font-bold text-gray-900">No Shop Found</h2>
+        <p className="mt-1 text-sm text-gray-500">
+          You need to create a shop before managing customer reviews.
+        </p>
+        <Link
+          href="/owner/dashboard"
+          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-gray-800"
+        >
+          Go to Dashboard
+        </Link>
       </div>
     );
   }
@@ -36,9 +49,8 @@ export default async function OwnerReviewsPage() {
     .eq("shop_id", shop.id)
     .order("created_at", { ascending: false });
 
-  // Supabase may return review_replies as a single object (not array) when a
-  // UNIQUE constraint exists on review_id. Normalize to always be an array.
-  const reviews = reviewsRaw?.map((r: any) => ({
+  // Normalize review_replies to always be an array
+  const reviews = (reviewsRaw || []).map((r: any) => ({
     ...r,
     review_replies: r.review_replies
       ? Array.isArray(r.review_replies)
@@ -48,31 +60,8 @@ export default async function OwnerReviewsPage() {
   }));
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Reviews</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Customer reviews for {shop.name}
-        </p>
-      </div>
-
-      {!reviews || reviews.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <MessageSquare className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-sm text-gray-500">No reviews yet.</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {(reviews as unknown as ReviewWithProfile[]).map((review) => (
-            <ReviewCard
-              key={review.id}
-              review={review}
-              showReplyForm
-              replyForm={<ReplyForm reviewId={review.id} />}
-            />
-          ))}
-        </div>
-      )}
+    <div className="w-full pb-10">
+      <OwnerReviewsClient shopId={shop.id} initialReviews={reviews} />
     </div>
   );
 }

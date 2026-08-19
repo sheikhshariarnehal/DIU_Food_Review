@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { login, signInWithGoogle } from "@/app/actions/auth";
 import Link from "next/link";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +37,10 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
-        <div className="text-center">
+        <div className="text-center flex flex-col items-center">
+          <Link href="/" className="mb-4 transition-transform hover:scale-105">
+            <BrandLogo size="2xl" priority />
+          </Link>
           <h1 className="text-3xl font-bold text-gray-900">
             DIU Food Review
           </h1>

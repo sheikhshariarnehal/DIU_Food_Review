@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signup } from "@/app/actions/auth";
 import Link from "next/link";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +40,7 @@ export default function SignupPage() {
             <h2 className="text-xl font-semibold text-green-800 mb-2">
               {isPending ? "Registration Submitted!" : "Account Created!"}
             </h2>
-            {isPending && (
+            {isPending && (\
               <p className="text-green-700 text-sm">
                 Your shop owner account is pending approval by the admin. You will be able to access your dashboard once approved.
               </p>
@@ -60,7 +61,10 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
-        <div className="text-center">
+        <div className="text-center flex flex-col items-center">
+          <Link href="/" className="mb-4 transition-transform hover:scale-105">
+            <BrandLogo size="2xl" priority />
+          </Link>
           <h1 className="text-3xl font-bold text-gray-900">
             Create Account
           </h1>
