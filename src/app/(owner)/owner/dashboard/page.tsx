@@ -176,7 +176,8 @@ export default async function OwnerDashboard() {
                 <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
                   {shop.name}
                 </h1>
-                {shop.is_active ? (\n                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                {shop.is_active ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                     Active Stall
                   </span>
@@ -263,7 +264,8 @@ export default async function OwnerDashboard() {
               <span className="font-semibold text-rose-600">
                 {unrepliedCount} pending {unrepliedCount === 1 ? "reply" : "replies"}
               </span>
-            ) : (\n              <span className="text-emerald-600 font-medium">All reviews answered</span>
+            ) : (
+              <span className="text-emerald-600 font-medium">All reviews answered</span>
             )
           }
           icon={<MessageSquare className="h-5 w-5" />}
@@ -336,44 +338,60 @@ export default async function OwnerDashboard() {
                     <th className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
                       Rating
                     </th>
-                    <th className="py-3 px-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    <th className="py-3 px-4 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
                       Reviews
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {leaderboard.slice(0, 5).map((entry, index) => {
+                    const rank = index + 1;
                     const isMe = entry.shop_id === shop.id;
                     return (
                       <tr
                         key={entry.shop_id}
                         className={`transition-colors ${
-                          isMe
-                            ? "bg-emerald-50/70 font-semibold"
-                            : "hover:bg-gray-50/60"
+                          isMe ? "bg-emerald-50/50 font-medium" : "hover:bg-gray-50/60"
                         }`}
                       >
-                        <td className="py-3 px-4 text-center">
-                          <RankBadge rank={index + 1} />
+                        <td className="py-3.5 px-4 text-center">
+                          <RankBadge rank={rank} />
                         </td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-900">
-                              {entry.shop_name}
-                            </span>
-                            {isMe && (
-                              <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-xs font-bold text-emerald-800">
-                                You
-                              </span>
-                            )}
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-3">
+                            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+                              <SafeImage
+                                src={entry.shop_image_url ?? ""}
+                                alt={entry.shop_name}
+                                fill
+                                fallbackType="store"
+                                className="object-cover"
+                                sizes="36px"
+                              />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="truncate text-sm font-semibold text-gray-900">
+                                  {entry.shop_name}
+                                </p>
+                                {isMe && (
+                                  <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-xs font-bold text-emerald-800">
+                                    You
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center">
-                          <span className="text-xs font-bold text-gray-900 tabular-nums">
-                            ⭐ {entry.avg_rating.toFixed(1)}
-                          </span>
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="inline-flex items-center gap-1.5">
+                            <StarRating rating={Number(entry.avg_rating)} size="xs" />
+                            <span className="text-xs font-bold tabular-nums text-gray-900">
+                              {Number(entry.avg_rating).toFixed(1)}
+                            </span>
+                          </div>
                         </td>
-                        <td className="py-3 px-4 text-right text-xs text-gray-500 tabular-nums">
+                        <td className="py-3.5 px-4 text-center text-xs font-semibold tabular-nums text-gray-500">
                           {entry.review_count}
                         </td>
                       </tr>
@@ -385,82 +403,141 @@ export default async function OwnerDashboard() {
           )}
         </div>
 
-        {/* Right Column: Recent Reviews Feed with Reply Status */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <div>
+        {/* Right Column: Quick Access & Recent Feedback */}
+        <div className="flex flex-col gap-6">
+          {/* Quick Access */}
+          <div className="rounded-2xl border border-gray-100 bg-white shadow-xs">
+            <div className="border-b border-gray-100 px-5 py-4">
               <h2 className="text-base font-bold text-gray-900">
-                Recent Reviews
+                Quick Shortcuts
               </h2>
-              <p className="text-xs text-gray-500">Latest student feedback</p>
             </div>
-            <Link
-              href="/owner/reviews"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
-            >
-              Manage All <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          {recentReviews.length === 0 ? (
-            <div className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-xs">
-              <MessageSquare className="mx-auto mb-2 h-8 w-8 text-gray-300" />
-              <p className="text-xs font-bold text-gray-800">No reviews yet</p>
-              <p className="mt-0.5 text-xs text-gray-400">
-                Customer reviews and ratings will show up here.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {recentReviews.map((review) => (
-                <div
-                  key={review.id}
-                  className="rounded-2xl border border-gray-100 bg-white p-4 shadow-2xs space-y-2"
+            <div className="space-y-2.5 p-4">
+              {[
+                {
+                  href: "/owner/menu",
+                  icon: <UtensilsCrossed className="h-4 w-4" />,
+                  label: "Manage Menu & Prices",
+                  sub: `${menuCount} items listed`,
+                  color: "bg-emerald-50 text-emerald-600",
+                },
+                {
+                  href: "/owner/reviews",
+                  icon: <MessageSquare className="h-4 w-4" />,
+                  label: "Customer Reviews & Replies",
+                  sub: unrepliedCount > 0 ? `${unrepliedCount} pending replies` : "All caught up",
+                  color: unrepliedCount > 0 ? "bg-amber-50 text-amber-600" : "bg-blue-50 text-blue-600",
+                },
+                {
+                  href: "/owner/shop",
+                  icon: <Store className="h-4 w-4" />,
+                  label: "Shop Profile Settings",
+                  sub: "Hours, photo & status",
+                  color: "bg-purple-50 text-purple-600",
+                },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group flex items-center rounded-xl border border-gray-100 bg-white p-3.5 transition-all hover:border-gray-200 hover:shadow-xs"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-900">
-                      {review.profiles?.full_name || "Student"}
-                    </span>
-                    <span className="text-[10px] text-gray-400">
-                      {formatDistanceToNow(review.created_at)}
-                    </span>
+                  <div
+                    className={`mr-3.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.color}`}
+                  >
+                    {item.icon}
                   </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <StarRating rating={review.rating} size="xs" />
-                    <span className="text-xs font-bold text-gray-700">
-                      {review.rating}.0
-                    </span>
-                  </div>
-
-                  {review.body && (
-                    <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
-                      &ldquo;{review.body}&rdquo;
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                      {item.label}
                     </p>
-                  )}
-
-                  <div className="flex items-center justify-between border-t border-gray-50 pt-2">
-                    {review.hasReply ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
-                        <CheckCircle2 className="h-3 w-3" /> Replied
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600">
-                        <Clock className="h-3 w-3" /> Needs Reply
-                      </span>
-                    )}
-
-                    <Link
-                      href="/owner/reviews"
-                      className="text-[11px] font-semibold text-gray-600 hover:text-gray-900 hover:underline"
-                    >
-                      {review.hasReply ? "View reply" : "Reply now →"}
-                    </Link>
+                    <p className="text-xs text-gray-400 truncate">
+                      {item.sub}
+                    </p>
                   </div>
-                </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-gray-500" />
+                </Link>
               ))}
             </div>
-          )}
+          </div>
+
+          {/* Recent Reviews Summary */}
+          <div className="flex flex-1 flex-col rounded-2xl border border-gray-100 bg-white shadow-xs">
+            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+              <div>
+                <h2 className="text-base font-bold text-gray-900">
+                  Recent Reviews
+                </h2>
+                <p className="text-xs text-gray-500">Student feedback stream</p>
+              </div>
+              <Link
+                href="/owner/reviews"
+                className="text-xs font-semibold text-emerald-600 hover:text-emerald-700"
+              >
+                View All →
+              </Link>
+            </div>
+            {recentReviews.length === 0 ? (
+              <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
+                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-gray-300">
+                  <MessageSquare className="h-5 w-5" />
+                </div>
+                <p className="text-xs font-semibold text-gray-600">No student reviews yet</p>
+                <p className="text-xs text-gray-400 mt-0.5">Reviews will appear here as students rate your stall.</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {recentReviews.slice(0, 3).map((review) => {
+                  const profile = review.profiles as unknown as {
+                    full_name: string;
+                  };
+                  const name = profile?.full_name || "DIU Student";
+
+                  return (
+                    <div
+                      key={review.id}
+                      className="p-4 transition-colors hover:bg-gray-50/50 space-y-1.5"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="truncate text-xs font-bold text-gray-900">
+                          {name}
+                        </p>
+                        <div className="flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-amber-700">
+                          <span className="text-xs font-bold tabular-nums">
+                            {review.rating}.0
+                          </span>
+                          <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                        </div>
+                      </div>
+
+                      {review.body && (
+                        <p className="line-clamp-2 text-xs text-gray-600 leading-relaxed">
+                          &ldquo;{review.body}&rdquo;
+                        </p>
+                      )}
+
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-gray-400">
+                          {formatDistanceToNow(review.created_at)}
+                        </span>
+                        {review.hasReply ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                            <CheckCircle2 className="h-3 w-3" /> Replied
+                          </span>
+                        ) : (
+                          <Link
+                            href="/owner/reviews"
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-700 hover:underline"
+                          >
+                            <AlertCircle className="h-3 w-3" /> Reply now
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
