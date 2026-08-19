@@ -173,7 +173,7 @@ function StatsBar({ entries }: { entries: LeaderboardEntry[] }) {
               {s.value}
             </span>
           </div>
-          <p className="mt-1 text-center text-[10px] font-medium uppercase tracking-wider text-gray-400 sm:text-xs">
+          <p className="mt-1 text-center text-xs font-medium uppercase tracking-wider text-gray-400 sm:text-xs">
             {s.label}
           </p>
         </div>
@@ -302,7 +302,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
       {/* Stats */}
       <StatsBar entries={entries} />
 
-      {/* Podium — only when default rank order with no search */}
+      {/* Podium */}
       {showPodium && top3.length >= 3 && (
         <div className="grid grid-cols-3 items-end gap-3 sm:gap-4">
           {/* 2nd place on the left */}
@@ -368,16 +368,16 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-50">
-                    <th className="w-16 px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                    <th className="w-16 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
                       #
                     </th>
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                    <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
                       Shop
                     </th>
-                    <th className="w-44 px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                    <th className="w-44 px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
                       Rating
                     </th>
-                    <th className="w-28 px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                    <th className="w-28 px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">
                       Reviews
                     </th>
                   </tr>
@@ -424,11 +424,11 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
                         <td className="px-5 py-3.5">
                           <div className="flex items-center gap-2">
                             <StarRating
-                              rating={Math.round(entry.avg_rating)}
+                              rating={entry.avg_rating}
                               size="sm"
                             />
                             <span className="text-sm font-medium text-gray-900">
-                              {entry.avg_rating.toFixed(2)}
+                              {entry.avg_rating.toFixed(1)}
                             </span>
                           </div>
                         </td>
@@ -516,7 +516,7 @@ function RankBadge({ rank }: { rank: number }) {
 
   return (
     <div
-      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[11px] font-bold ${style}`}
+      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${style}`}
     >
       {rank}
     </div>
