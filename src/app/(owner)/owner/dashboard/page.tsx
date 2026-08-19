@@ -260,11 +260,11 @@ export default async function OwnerDashboard() {
           label="Total Reviews"
           value={reviewCount.toLocaleString()}
           sub={
-            unrepliedCount > 0 ? (\
+            unrepliedCount > 0 ? (
               <span className="font-semibold text-rose-600">
                 {unrepliedCount} pending {unrepliedCount === 1 ? "reply" : "replies"}
               </span>
-            ) : (\
+            ) : (
               <span className="text-emerald-600 font-medium">All reviews answered</span>
             )
           }
@@ -282,11 +282,11 @@ export default async function OwnerDashboard() {
           label="Leaderboard Rank"
           value={isRanked ? `#${myLeaderboardRank}` : "—"}
           sub={
-            isRanked ? (\
+            isRanked ? (
               <span className="text-purple-600 font-medium">
                 Top {Math.max(1, Math.round((myLeaderboardRank / Math.max(1, leaderboard.length)) * 100))}% on campus
               </span>
-            ) : (\
+            ) : (
               <span className="text-gray-400">Needs 5+ reviews</span>
             )
           }
@@ -316,7 +316,7 @@ export default async function OwnerDashboard() {
             </Link>
           </div>
 
-          {leaderboard.length === 0 ? (\
+          {leaderboard.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-10 text-center">
               <Trophy className="h-8 w-8 text-gray-300 mb-2" />
               <p className="text-sm font-semibold text-gray-700">No ranked shops yet</p>
@@ -324,7 +324,7 @@ export default async function OwnerDashboard() {
                 Shops appear here after accumulating 5 or more verified student reviews.
               </p>
             </div>
-          ) : (\
+          ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -350,7 +350,7 @@ export default async function OwnerDashboard() {
                     return (
                       <tr
                         key={entry.shop_id}
-                        className={`transition-colors ${\
+                        className={`transition-colors ${
                           isMe ? "bg-emerald-50/50 font-medium" : "hover:bg-gray-50/60"
                         }`}
                       >
@@ -374,7 +374,7 @@ export default async function OwnerDashboard() {
                                 <p className="truncate text-sm font-semibold text-gray-900">
                                   {entry.shop_name}
                                 </p>
-                                {isMe && (\
+                                {isMe && (
                                   <span className="rounded-md bg-emerald-100 px-1.5 py-0.5 text-xs font-bold text-emerald-800">
                                     You
                                   </span>
@@ -413,133 +413,133 @@ export default async function OwnerDashboard() {
               </h2>
             </div>
             <div className="space-y-2.5 p-4">
-              {[\
-                {\
-                  href: \"/owner/menu\",\
-                  icon: <UtensilsCrossed className=\"h-4 w-4\" />,\
-                  label: \"Manage Menu & Prices\",\
-                  sub: `${menuCount} items listed`,\
-                  color: \"bg-emerald-50 text-emerald-600\",\
-                },\
-                {\
-                  href: \"/owner/reviews\",\
-                  icon: <MessageSquare className=\"h-4 w-4\" />,\
-                  label: \"Customer Reviews & Replies\",\
-                  sub: unrepliedCount > 0 ? `${unrepliedCount} pending replies` : \"All caught up\",\
-                  color: unrepliedCount > 0 ? \"bg-amber-50 text-amber-600\" : \"bg-blue-50 text-blue-600\",\
-                },\
-                {\
-                  href: \"/owner/shop\",\
-                  icon: <Store className=\"h-4 w-4\" />,\
-                  label: \"Shop Profile Settings\",\
-                  sub: \"Hours, photo & status\",\
-                  color: \"bg-purple-50 text-purple-600\",\
-                },\
-              ].map((item) => (\
-                <Link\
-                  key={item.href}\
-                  href={item.href}\
-                  className=\"group flex items-center rounded-xl border border-gray-100 bg-white p-3.5 transition-all hover:border-gray-200 hover:shadow-xs\"\
-                >\
-                  <div\
-                    className={`mr-3.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.color}`}\
-                  >\
-                    {item.icon}\
-                  </div>\
-                  <div className=\"flex-1 min-w-0\">\
-                    <p className=\"text-xs font-bold text-gray-900 group-hover:text-emerald-600 transition-colors\">\
-                      {item.label}\
-                    </p>\
-                    <p className=\"text-xs text-gray-400 truncate\">\
-                      {item.sub}\
-                    </p>\
-                  </div>\
-                  <ChevronRight className=\"h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-gray-500\" />\
-                </Link>\
-              ))}\
-            </div>\
-          </div>\
-\
-          {/* Recent Reviews Summary */}\
-          <div className=\"flex flex-1 flex-col rounded-2xl border border-gray-100 bg-white shadow-xs\">\
-            <div className=\"flex items-center justify-between border-b border-gray-100 px-5 py-4\">\
-              <div>\
-                <h2 className=\"text-base font-bold text-gray-900\">\
-                  Recent Reviews\
-                </h2>\
-                <p className=\"text-xs text-gray-500\">Student feedback stream</p>\
-              </div>\
-              <Link\
-                href=\"/owner/reviews\"\
-                className=\"text-xs font-semibold text-emerald-600 hover:text-emerald-700\"\
-              >\
-                View All →\
-              </Link>\
-            </div>\
-            {recentReviews.length === 0 ? (\
-              <div className=\"flex flex-1 flex-col items-center justify-center p-8 text-center\">\
-                <div className=\"mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-gray-300\">\
-                  <MessageSquare className=\"h-5 w-5\" />\
-                </div>\
-                <p className=\"text-xs font-semibold text-gray-600\">No student reviews yet</p>\
-                <p className=\"text-xs text-gray-400 mt-0.5\">Reviews will appear here as students rate your stall.</p>\
-              </div>\
-            ) : (\
-              <div className=\"divide-y divide-gray-50\">\
-                {recentReviews.slice(0, 3).map((review) => {\
-                  const profile = review.profiles as unknown as {\
-                    full_name: string;\
-                  };\
-                  const name = profile?.full_name || \"DIU Student\";\
-\
-                  return (\
-                    <div\
-                      key={review.id}\
-                      className=\"p-4 transition-colors hover:bg-gray-50/50 space-y-1.5\"\
-                    >\
-                      <div className=\"flex items-start justify-between gap-2\">\
-                        <p className=\"truncate text-xs font-bold text-gray-900\">\
-                          {name}\
-                        </p>\
-                        <div className=\"flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-amber-700\">\
-                          <span className=\"text-xs font-bold tabular-nums\">\
-                            {review.rating}.0\
-                          </span>\
-                          <Star className=\"h-3 w-3 fill-amber-500 text-amber-500\" />\
-                        </div>\
-                      </div>\
-\
-                      {review.body && (\
-                        <p className=\"line-clamp-2 text-xs text-gray-600 leading-relaxed\">\
-                          &ldquo;{review.body}&rdquo;\
-                        </p>\
-                      )}\
-\
-                      <div className=\"flex items-center justify-between pt-1\">\
-                        <span className=\"text-xs text-gray-400\">\
-                          {formatDistanceToNow(review.created_at)}\
-                        </span>\
-                        {review.hasReply ? (\
-                          <span className=\"inline-flex items-center gap-1 text-xs font-semibold text-emerald-600\">\
-                            <CheckCircle2 className=\"h-3 w-3\" /> Replied\
-                          </span>\
-                        ) : (\
-                          <Link\
-                            href=\"/owner/reviews\"\
-                            className=\"inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-700 hover:underline\"\
-                          >\
-                            <AlertCircle className=\"h-3 w-3\" /> Reply now\
-                          </Link>\
-                        )}\
-                      </div>\
-                    </div>\
-                  );\
-                })}\
-              </div>\
-            )}\
-          </div>\
-        </div>\
-      </div>\
-    </div>\
-  );\
-}\
+              {[
+                {
+                  href: "/owner/menu",
+                  icon: <UtensilsCrossed className="h-4 w-4" />,
+                  label: "Manage Menu & Prices",
+                  sub: `${menuCount} items listed`,
+                  color: "bg-emerald-50 text-emerald-600",
+                },
+                {
+                  href: "/owner/reviews",
+                  icon: <MessageSquare className="h-4 w-4" />,
+                  label: "Customer Reviews & Replies",
+                  sub: unrepliedCount > 0 ? `${unrepliedCount} pending replies` : "All caught up",
+                  color: unrepliedCount > 0 ? "bg-amber-50 text-amber-600" : "bg-blue-50 text-blue-600",
+                },
+                {
+                  href: "/owner/shop",
+                  icon: <Store className="h-4 w-4" />,
+                  label: "Shop Profile Settings",
+                  sub: "Hours, photo & status",
+                  color: "bg-purple-50 text-purple-600",
+                },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group flex items-center rounded-xl border border-gray-100 bg-white p-3.5 transition-all hover:border-gray-200 hover:shadow-xs"
+                >
+                  <div
+                    className={`mr-3.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.color}`}
+                  >
+                    {item.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                      {item.label}
+                    </p>
+                    <p className="text-xs text-gray-400 truncate">
+                      {item.sub}
+                    </p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-gray-500" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Reviews Summary */}
+          <div className="flex flex-1 flex-col rounded-2xl border border-gray-100 bg-white shadow-xs">
+            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+              <div>
+                <h2 className="text-base font-bold text-gray-900">
+                  Recent Reviews
+                </h2>
+                <p className="text-xs text-gray-500">Student feedback stream</p>
+              </div>
+              <Link
+                href="/owner/reviews"
+                className="text-xs font-semibold text-emerald-600 hover:text-emerald-700"
+              >
+                View All →
+              </Link>
+            </div>
+            {recentReviews.length === 0 ? (
+              <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
+                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-gray-300">
+                  <MessageSquare className="h-5 w-5" />
+                </div>
+                <p className="text-xs font-semibold text-gray-600">No student reviews yet</p>
+                <p className="text-xs text-gray-400 mt-0.5">Reviews will appear here as students rate your stall.</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {recentReviews.slice(0, 3).map((review) => {
+                  const profile = review.profiles as unknown as {
+                    full_name: string;
+                  };
+                  const name = profile?.full_name || "DIU Student";
+
+                  return (
+                    <div
+                      key={review.id}
+                      className="p-4 transition-colors hover:bg-gray-50/50 space-y-1.5"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="truncate text-xs font-bold text-gray-900">
+                          {name}
+                        </p>
+                        <div className="flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-amber-700">
+                          <span className="text-xs font-bold tabular-nums">
+                            {review.rating}.0
+                          </span>
+                          <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                        </div>
+                      </div>
+
+                      {review.body && (
+                        <p className="line-clamp-2 text-xs text-gray-600 leading-relaxed">
+                          &ldquo;{review.body}&rdquo;
+                        </p>
+                      )}
+
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs text-gray-400">
+                          {formatDistanceToNow(review.created_at)}
+                        </span>
+                        {review.hasReply ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                            <CheckCircle2 className="h-3 w-3" /> Replied
+                          </span>
+                        ) : (
+                          <Link
+                            href="/owner/reviews"
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-700 hover:underline"
+                          >
+                            <AlertCircle className="h-3 w-3" /> Reply now
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
