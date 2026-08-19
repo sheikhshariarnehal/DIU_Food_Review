@@ -8,7 +8,7 @@ import {
   toggleMenuItemStatus,
   deleteMenuItem,
 } from "@/app/actions/menu";
-import type { MenuItem } from "@/lib/types/database";
+import type { MenuItem, MenuItemWithRating } from "@/lib/types/database";
 import {
   Plus,
   UtensilsCrossed,
@@ -46,14 +46,14 @@ import { Separator } from "@/components/ui/separator";
 
 interface MenuClientProps {
   shopId: string;
-  initialItems: MenuItem[];
+  initialItems: MenuItemWithRating[];
 }
 
 export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
   const [items, setItems] = useState(initialItems);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editItem, setEditItem] = useState<MenuItem | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<MenuItem | null>(null);
+  const [editItem, setEditItem] = useState<MenuItemWithRating | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<MenuItemWithRating | null>(null);
   const [loading, setLoading] = useState(false);
 
   function openAddDialog() {
@@ -332,5 +332,3 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
     </div>
   );
 }
-
-

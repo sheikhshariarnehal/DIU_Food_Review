@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import MenuClient from "./MenuClient";
 import { Store } from "lucide-react";
 import Link from "next/link";
+import type { MenuItemWithRating } from "@/lib/types/database";
 
 export default async function OwnerMenuPage() {
   const supabase = await createClient();
@@ -32,7 +33,7 @@ export default async function OwnerMenuPage() {
         </p>
         <Link
           href="/owner/dashboard"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
         >
           Create Shop
         </Link>
@@ -40,12 +41,30 @@ export default async function OwnerMenuPage() {
     );
   }
 
-  // Get menu items
-  const { data: menuItems } = await supabase
+  // Get menu items with review ratings
+  const { data: menuItemsRaw } = await supabase
     .from("menu_items")
-    .select("*")
+    .select("*, menu_item_reviews(rating)")
     .eq("shop_id", shop.id)
     .order("created_at", { ascending: true });
+
+  const menuItems: MenuItemWithRating[] = (menuItemsRaw || []).map((item: any) => {
+    const itemReviews = Array.isArray(item.menu_item_reviews)
+      ? item.menu_item_reviews
+      : item.menu_item_reviews
+      ? [item.menu_item_reviews]
+      : [];
+    const count = itemReviews.length;
+    const total = itemReviews.reduce(
+      (sum: number, r: { rating: number }) => sum + (r.rating || 0),
+      0
+    );
+    return {
+      ...item,
+      avg_rating: count > 0 ? Number((total / count).toFixed(2)) : 0,
+      review_count: count,
+    };
+  });
 
   return (
     <div className="w-full max-w-6xl mx-auto pb-12">

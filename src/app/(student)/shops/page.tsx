@@ -1,22 +1,37 @@
 import { createClient } from "@/lib/supabase/server";
-import { ShopCard } from "@/components/ShopCard";
+import { StudentShopSearch } from "@/components/StudentShopSearch";
 import { StarRating } from "@/components/StarRating";
-import { Trophy, Store, ArrowRight } from "lucide-react";
+import { Trophy, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { ShopWithRating, LeaderboardEntry } from "@/lib/types/database";
 
 export default async function StudentDashboard() {
   const supabase = await createClient();
 
-  // Fetch all active shops with their ratings
+  // Fetch all active shops
   const { data: shops } = await supabase
     .from("shops")
     .select("*")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
+  // Fetch all active menu items to support deep item search across shops
+  const { data: allMenuItems } = await supabase
+    .from("menu_items")
+    .select("shop_id, name")
+    .eq("status", "active");
+
+  const menuItemsByShop = new Map<string, string[]>();
+  if (allMenuItems) {
+    for (const item of allMenuItems) {
+      const existing = menuItemsByShop.get(item.shop_id) || [];
+      existing.push(item.name);
+      menuItemsByShop.set(item.shop_id, existing);
+    }
+  }
+
   // Get ratings for each shop
-  const shopsWithRatings: ShopWithRating[] = [];
+  const shopsWithRatings: (ShopWithRating & { menuItemNames: string[] })[] = [];
   if (shops) {
     for (const shop of shops) {
       const { data: ratingData } = await supabase.rpc("get_shop_average_rating", {
@@ -26,6 +41,7 @@ export default async function StudentDashboard() {
         ...shop,
         avg_rating: ratingData?.[0]?.avg_rating ?? 0,
         review_count: ratingData?.[0]?.review_count ?? 0,
+        menuItemNames: menuItemsByShop.get(shop.id) || [],
       });
     }
   }
@@ -48,7 +64,7 @@ export default async function StudentDashboard() {
       <div>
         <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">Food Shops</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Discover and review food shops at DIU campus
+          Discover, search, and review food shops and dishes at DIU campus
         </p>
       </div>
 
@@ -64,7 +80,7 @@ export default async function StudentDashboard() {
             </div>
             <Link
               href="/leaderboard"
-              className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+              className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
             >
               View All <ArrowRight className="h-3 w-3" />
             </Link>
@@ -82,12 +98,12 @@ export default async function StudentDashboard() {
                   >
                     {index + 1}
                   </span>
-                  <span className="truncate text-sm font-medium text-gray-900 group-hover:text-emerald-600">
+                  <span className="truncate text-sm font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
                     {entry.shop_name}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <StarRating rating={Math.round(entry.avg_rating)} size="sm" />
+                  <StarRating rating={entry.avg_rating} size="sm" />
                   <span className="text-xs font-medium text-gray-500">
                     {entry.avg_rating.toFixed(1)}
                   </span>
@@ -98,22 +114,8 @@ export default async function StudentDashboard() {
         </div>
       )}
 
-      {/* All Shops Grid */}
-      {shopsWithRatings.length === 0 ? (
-        <div className="rounded-2xl border border-gray-100 bg-white p-12 text-center shadow-sm">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
-            <Store className="h-6 w-6 text-gray-300" />
-          </div>
-          <p className="text-sm font-medium text-gray-900">No shops available yet.</p>
-          <p className="mt-1 text-xs text-gray-400">Check back soon for new shops.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {shopsWithRatings.map((shop) => (
-            <ShopCard key={shop.id} shop={shop} />
-          ))}
-        </div>
-      )}
+      {/* Interactive Search & Filterable Shop Listing */}
+      <StudentShopSearch shops={shopsWithRatings} />
     </div>
   );
 }

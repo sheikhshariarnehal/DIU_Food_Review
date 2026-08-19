@@ -52,6 +52,9 @@ export async function submitReview(shopId: string, rating: number, body: string)
   revalidatePath(`/shops/${shopId}`);
   revalidatePath("/leaderboard");
   revalidatePath("/shops");
+  revalidatePath("/my-reviews");
+  revalidatePath("/owner/dashboard");
+  revalidatePath("/owner/reviews");
 
   return { success: true };
 }
@@ -100,6 +103,8 @@ export async function updateReview(reviewId: string, rating: number, body: strin
   revalidatePath("/leaderboard");
   revalidatePath("/shops");
   revalidatePath("/my-reviews");
+  revalidatePath("/owner/dashboard");
+  revalidatePath("/owner/reviews");
 
   return { success: true };
 }
@@ -149,6 +154,10 @@ export async function submitReply(reviewId: string, body: string) {
   }
 
   revalidatePath("/owner/reviews");
+  revalidatePath("/owner/dashboard");
+  revalidatePath(`/shops/${review.shop_id}`);
+  revalidatePath("/shops");
+  revalidatePath("/my-reviews");
 
   return { success: true };
 }

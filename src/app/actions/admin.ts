@@ -27,6 +27,74 @@ async function requireAdmin() {
   return { error: null, user };
 }
 
+// ─── Shop Owner Invitation Action ───────────────────────────
+export async function inviteShopOwner(email: string, fullName: string) {
+  const { error: authError } = await requireAdmin();
+  if (authError) return { error: authError };
+
+  if (!email || !email.includes("@")) {
+    return { error: "A valid email is required." };
+  }
+
+  const supabase = await createServiceClient();
+
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanName = fullName.trim() || "Shop Owner";
+
+  // Check if profile with email already exists
+  const { data: existingProfile } = await supabase
+    .from("profiles")
+    .select("id, role, status")
+    .eq("email", cleanEmail)
+    .maybeSingle();
+
+  if (existingProfile) {
+    if (existingProfile.role === "shop_owner") {
+      if (existingProfile.status === "pending") {
+        await supabase
+          .from("profiles")
+          .update({ status: "active" })
+          .eq("id", existingProfile.id);
+        revalidatePath("/admin/approvals");
+        revalidatePath("/admin/users");
+        return { success: true, message: `Approved and activated shop owner ${cleanEmail}` };
+      }
+      return { error: `Shop owner account already exists for ${cleanEmail}` };
+    }
+    return { error: `An account already exists for ${cleanEmail}` };
+  }
+
+  // Invite user via Supabase Auth Admin API
+  const { data: inviteData, error: inviteError } =
+    await supabase.auth.admin.inviteUserByEmail(cleanEmail, {
+      data: {
+        full_name: cleanName,
+        role: "shop_owner",
+      },
+    });
+
+  if (inviteError) {
+    return { error: inviteError.message || "Failed to invite shop owner." };
+  }
+
+  if (inviteData?.user) {
+    await supabase
+      .from("profiles")
+      .update({
+        status: "active",
+        full_name: cleanName,
+        role: "shop_owner",
+      })
+      .eq("id", inviteData.user.id);
+  }
+
+  revalidatePath("/admin/shops");
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/approvals");
+
+  return { success: true, message: `Invitation sent successfully to ${cleanEmail}` };
+}
+
 // ─── Approval Actions ───────────────────────────────────────
 export async function approveShopOwner(profileId: string) {
   const { error: authError } = await requireAdmin();

@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { createShop, updateShop, deleteShop } from "@/app/actions/admin";
+import { updateShop, deleteShop, inviteShopOwner } from "@/app/actions/admin";
 import type { Shop, Profile } from "@/lib/types/database";
 import { toast } from "sonner";
 import {
-  Plus,
   Pencil,
   Trash2,
   Search,
@@ -15,12 +14,13 @@ import {
   ArrowDown,
   ArrowUpDown,
   X,
-  CheckCircle2,
-  XCircle,
   Loader2,
   TrendingUp,
   ShoppingBag,
   BarChart3,
+  Mail,
+  Send,
+  UserPlus,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -112,6 +112,9 @@ function ShopImage({
         src={src}
         alt={alt}
         className={`${sizeClasses[size]} shrink-0 rounded-xl object-cover border border-gray-100 shadow-sm`}
+        onError={(e) => {
+          (e.target as HTMLElement).style.display = "none";
+        }}
       />
     );
   }
@@ -146,10 +149,12 @@ export default function ShopsClient({
 }: ShopsClientProps) {
   const [shops, setShops] = useState(initialShops);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [shopToDelete, setShopToDelete] = useState<Shop | null>(null);
   const [editShop, setEditShop] = useState<Shop | null>(null);
   const [loading, setLoading] = useState(false);
+  const [inviteLoading, setInviteLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -159,6 +164,10 @@ export default function ShopsClient({
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [isActive, setIsActive] = useState(true);
   const [imagePreview, setImagePreview] = useState<string>("");
+
+  // Invite Form State
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteName, setInviteName] = useState("");
 
   const activeCount = shops.filter((s) => s.is_active).length;
   const inactiveCount = shops.length - activeCount;
@@ -211,13 +220,6 @@ export default function ShopsClient({
     }
   }
 
-  function openCreateDialog() {
-    setEditShop(null);
-    setIsActive(true);
-    setImagePreview("");
-    setDialogOpen(true);
-  }
-
   function openEditDialog(shop: Shop) {
     setEditShop(shop);
     setIsActive(shop.is_active);
@@ -237,31 +239,44 @@ export default function ShopsClient({
 
   const hasActiveFilters = searchQuery !== "" || statusFilter !== "all";
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleEditSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!editShop) return;
+
     setLoading(true);
     const formData = new FormData(e.currentTarget);
+    formData.set("shop_id", editShop.id);
+    formData.set("is_active", String(isActive));
 
-    if (editShop) {
-      formData.set("shop_id", editShop.id);
-      formData.set("is_active", String(isActive));
-      const result = await updateShop(formData);
-      if (result?.error) toast.error(result.error);
-      else {
-        toast.success(`"${formData.get("name")}" updated successfully`);
-        setDialogOpen(false);
-        window.location.reload();
-      }
+    const result = await updateShop(formData);
+    if (result?.error) {
+      toast.error(result.error);
     } else {
-      const result = await createShop(formData);
-      if (result?.error) toast.error(result.error);
-      else {
-        toast.success(`"${formData.get("name")}" created successfully`);
-        setDialogOpen(false);
-        window.location.reload();
-      }
+      toast.success(`"${formData.get("name")}" updated successfully`);
+      setDialogOpen(false);
+      window.location.reload();
     }
     setLoading(false);
+  }
+
+  async function handleInviteSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!inviteEmail || !inviteEmail.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    setInviteLoading(true);
+    const result = await inviteShopOwner(inviteEmail, inviteName);
+    if (result?.error) {
+      toast.error(result.error);
+    } else {
+      toast.success(result.message || "Invitation sent successfully!");
+      setInviteDialogOpen(false);
+      setInviteEmail("");
+      setInviteName("");
+    }
+    setInviteLoading(false);
   }
 
   async function handleDelete() {
@@ -297,12 +312,16 @@ export default function ShopsClient({
             Shop Management
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Create, edit, and manage all registered food shops.
+            Monitor, manage, and configure food shops across DIU campus.
           </p>
         </div>
-        <Button onClick={openCreateDialog} size="lg" className="shrink-0 shadow-sm">
-          <Plus className="h-4 w-4" data-icon="inline-start" />
-          Add Shop
+        <Button
+          onClick={() => setInviteDialogOpen(true)}
+          size="lg"
+          className="shrink-0 rounded-xl bg-gray-900 font-medium text-white shadow-sm hover:bg-gray-800"
+        >
+          <Mail className="h-4 w-4 mr-2" />
+          Invite Shop Owner
         </Button>
       </div>
 
@@ -505,7 +524,7 @@ export default function ShopsClient({
               {filteredShops.length === 0 ? (
                 <TableRow className="hover:bg-transparent">
                   <TableCell colSpan={5} className="h-48 text-center">
-                    <div className="flex flex-col items-center gap-4 text-gray-400">
+                    <div className="flex flex-col items-center gap-3 text-gray-400">
                       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50 shadow-sm">
                         <Store className="h-7 w-7 text-gray-300" />
                       </div>
@@ -516,10 +535,10 @@ export default function ShopsClient({
                         <p className="mt-1 text-xs text-gray-400">
                           {hasActiveFilters
                             ? "Try adjusting your search or filters"
-                            : "Get started by adding your first shop"}
+                            : "No registered shops found."}
                         </p>
                       </div>
-                      {hasActiveFilters ? (
+                      {hasActiveFilters && (
                         <Button
                           variant="outline"
                           size="sm"
@@ -527,11 +546,6 @@ export default function ShopsClient({
                           className="shadow-sm"
                         >
                           Clear Filters
-                        </Button>
-                      ) : (
-                        <Button size="sm" onClick={openCreateDialog} className="shadow-sm">
-                          <Plus className="h-3.5 w-3.5" data-icon="inline-start" />
-                          Add Shop
                         </Button>
                       )}
                     </div>
@@ -660,7 +674,7 @@ export default function ShopsClient({
       {/* ─── Mobile Card List ─── */}
       <div className="flex flex-col gap-3 md:hidden">
         {filteredShops.length === 0 ? (
-          <div className="flex flex-col items-center gap-4 rounded-2xl border border-gray-100 bg-white px-6 py-14 shadow-sm">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-gray-100 bg-white px-6 py-14 shadow-sm">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50">
               <Store className="h-7 w-7 text-gray-300" />
             </div>
@@ -671,17 +685,12 @@ export default function ShopsClient({
               <p className="mt-1 text-xs text-gray-400">
                 {hasActiveFilters
                   ? "Try adjusting your search or filters"
-                  : "Get started by adding your first shop"}
+                  : "No registered shops found."}
               </p>
             </div>
-            {hasActiveFilters ? (
+            {hasActiveFilters && (
               <Button variant="outline" size="sm" onClick={clearFilters} className="shadow-sm">
                 Clear Filters
-              </Button>
-            ) : (
-              <Button size="sm" onClick={openCreateDialog} className="shadow-sm">
-                <Plus className="h-3.5 w-3.5" data-icon="inline-start" />
-                Add Shop
               </Button>
             )}
           </div>
@@ -780,102 +789,68 @@ export default function ShopsClient({
         )}
       </div>
 
-      {/* ─── Create / Edit Dialog ─── */}
+      {/* ─── Edit Shop Dialog ─── */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>
-              {editShop ? "Edit Shop" : "Create New Shop"}
-            </DialogTitle>
+            <DialogTitle>Edit Shop</DialogTitle>
             <DialogDescription>
-              {editShop
-                ? "Update the shop details below."
-                : "Fill in the details to register a new shop."}
+              Update the shop details and active status.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="shop-name">
-                Shop Name <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                id="shop-name"
-                name="name"
-                placeholder="e.g. Campus Burger & Grill"
-                required
-                defaultValue={editShop?.name ?? ""}
-                key={editShop?.id ?? "new"}
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="shop-description">Description</Label>
-              <Textarea
-                id="shop-description"
-                name="description"
-                placeholder="Brief description of the shop..."
-                rows={3}
-                defaultValue={editShop?.description ?? ""}
-                key={`desc-${editShop?.id ?? "new"}`}
-              />
-            </div>
-
-            {!editShop && (
+          {editShop && (
+            <form onSubmit={handleEditSubmit} className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="shop-owner">
-                  Assign Owner <span className="text-destructive">*</span>
+                <Label htmlFor="shop-name">
+                  Shop Name <span className="text-destructive">*</span>
                 </Label>
-                <select
-                  id="shop-owner"
-                  name="owner_id"
+                <Input
+                  id="shop-name"
+                  name="name"
+                  placeholder="e.g. Campus Burger & Grill"
                   required
-                  className="flex h-10 w-full items-center rounded-xl border border-gray-200 bg-gray-50/50 px-3 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  <option value="">Select an approved shop owner...</option>
-                  {approvedOwners.map((owner) => (
-                    <option key={owner.id} value={owner.id}>
-                      {owner.full_name || owner.email}
-                    </option>
-                  ))}
-                </select>
-                {approvedOwners.length === 0 && (
-                  <p className="text-xs text-amber-600">
-                    No approved shop owners available. Approve owners in the
-                    Approvals tab first.
-                  </p>
+                  defaultValue={editShop.name}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="shop-description">Description</Label>
+                <Textarea
+                  id="shop-description"
+                  name="description"
+                  placeholder="Brief description of the shop..."
+                  rows={3}
+                  defaultValue={editShop.description ?? ""}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="shop-image">Image URL</Label>
+                <Input
+                  id="shop-image"
+                  name="image_url"
+                  type="url"
+                  placeholder="https://example.com/image.jpg"
+                  defaultValue={editShop.image_url ?? ""}
+                  onChange={(e) => setImagePreview(e.target.value)}
+                />
+                {imagePreview && (
+                  <div className="relative mt-1 overflow-hidden rounded-xl border border-gray-100 bg-gray-50 shadow-sm">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="h-32 w-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                      onLoad={(e) => {
+                        (e.target as HTMLImageElement).style.display = "block";
+                      }}
+                    />
+                  </div>
                 )}
               </div>
-            )}
 
-            <div className="grid gap-2">
-              <Label htmlFor="shop-image">Image URL</Label>
-              <Input
-                id="shop-image"
-                name="image_url"
-                type="url"
-                placeholder="https://example.com/image.jpg"
-                defaultValue={editShop?.image_url ?? ""}
-                onChange={(e) => setImagePreview(e.target.value)}
-                key={`img-${editShop?.id ?? "new"}`}
-              />
-              {imagePreview && (
-                <div className="relative mt-1 overflow-hidden rounded-xl border border-gray-100 bg-gray-50 shadow-sm">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="h-32 w-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                    onLoad={(e) => {
-                      (e.target as HTMLImageElement).style.display = "block";
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-
-            {editShop && (
               <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50/50 p-4">
                 <div className="space-y-0.5">
                   <Label htmlFor="shop-active">Active Status</Label>
@@ -889,24 +864,83 @@ export default function ShopsClient({
                   onCheckedChange={setIsActive}
                 />
               </div>
-            )}
+
+              <DialogFooter>
+                <DialogClose render={<Button variant="outline" />}>
+                  Cancel
+                </DialogClose>
+                <Button type="submit" disabled={loading} className="shadow-sm">
+                  {loading && (
+                    <Loader2
+                      className="h-4 w-4 animate-spin mr-1.5"
+                    />
+                  )}
+                  {loading ? "Saving..." : "Save Changes"}
+                </Button>
+              </DialogFooter>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ─── Invite Shop Owner Dialog ─── */}
+      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Mail className="h-5 w-5 text-gray-700" />
+              Invite Shop Owner
+            </DialogTitle>
+            <DialogDescription>
+              Send an email invitation to a new shop owner. They can register, log in, and set up their own food shop.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleInviteSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="invite-email">
+                Owner Email Address <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="invite-email"
+                type="email"
+                required
+                placeholder="owner@diu.edu.bd or owner@gmail.com"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                className="rounded-xl"
+              />
+              <p className="text-xs text-gray-400">
+                An invitation link will be sent to this email.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="invite-name">Owner Full Name (Optional)</Label>
+              <Input
+                id="invite-name"
+                type="text"
+                placeholder="e.g. Mohammad Rahman"
+                value={inviteName}
+                onChange={(e) => setInviteName(e.target.value)}
+                className="rounded-xl"
+              />
+            </div>
 
             <DialogFooter>
               <DialogClose render={<Button variant="outline" />}>
                 Cancel
               </DialogClose>
-              <Button type="submit" disabled={loading} className="shadow-sm">
-                {loading && (
-                  <Loader2
-                    className="h-4 w-4 animate-spin"
-                    data-icon="inline-start"
-                  />
+              <Button
+                type="submit"
+                disabled={inviteLoading}
+                className="rounded-xl bg-gray-900 text-white hover:bg-gray-800 shadow-sm"
+              >
+                {inviteLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
+                ) : (
+                  <Send className="h-4 w-4 mr-1.5" />
                 )}
-                {loading
-                  ? "Saving..."
-                  : editShop
-                  ? "Save Changes"
-                  : "Create Shop"}
+                {inviteLoading ? "Sending Invite..." : "Send Invitation"}
               </Button>
             </DialogFooter>
           </form>

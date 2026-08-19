@@ -36,6 +36,11 @@ export interface MenuItem {
   created_at: string;
 }
 
+export interface MenuItemWithRating extends MenuItem {
+  avg_rating?: number;
+  review_count?: number;
+}
+
 export interface Review {
   id: string;
   shop_id: string;
@@ -53,6 +58,19 @@ export interface ReviewReply {
   created_at: string;
 }
 
+export interface MenuItemReview {
+  id: string;
+  menu_item_id: string;
+  user_id: string;
+  rating: number;
+  body: string;
+  created_at: string;
+}
+
+export interface MenuItemReviewWithProfile extends MenuItemReview {
+  profiles: Pick<Profile, "full_name" | "avatar_url">;
+}
+
 export interface LeaderboardEntry {
   shop_id: string;
   shop_name: string;
@@ -68,7 +86,7 @@ export interface ShopWithRating extends Shop {
 
 export interface ReviewWithProfile extends Review {
   profiles: Pick<Profile, "full_name" | "avatar_url">;
-  review_replies: ReviewReply[];
+  review_replies: ReviewReply[] | ReviewReply | null;
 }
 
 // Supabase Database type helper
@@ -93,12 +111,17 @@ export interface Database {
       reviews: {
         Row: Review;
         Insert: Omit<Review, "id" | "created_at">;
-        Update: never;
+        Update: Partial<Omit<Review, "id" | "created_at">>;
       };
       review_replies: {
         Row: ReviewReply;
         Insert: Omit<ReviewReply, "id" | "created_at">;
-        Update: never;
+        Update: Partial<Omit<ReviewReply, "id" | "created_at">>;
+      };
+      menu_item_reviews: {
+        Row: MenuItemReview;
+        Insert: Omit<MenuItemReview, "id" | "created_at">;
+        Update: Partial<Omit<MenuItemReview, "id" | "created_at">>;
       };
     };
     Views: {
@@ -109,6 +132,10 @@ export interface Database {
     Functions: {
       get_shop_average_rating: {
         Args: { p_shop_id: string };
+        Returns: { avg_rating: number; review_count: number }[];
+      };
+      get_menu_item_average_rating: {
+        Args: { p_menu_item_id: string };
         Returns: { avg_rating: number; review_count: number }[];
       };
     };

@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { StarRating } from "@/components/StarRating";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { ReviewCard } from "@/components/ReviewCard";
 import { ReviewForm } from "@/components/ReviewForm";
 import { MenuItemCard } from "@/components/MenuItemCard";
 import { Store, MessageSquare, UtensilsCrossed } from "lucide-react";
 import type { Metadata } from "next";
-import type { ReviewWithProfile } from "@/lib/types/database";
+import type { ReviewWithProfile, MenuItemWithRating } from "@/lib/types/database";
 
 interface ShopDetailPageProps {
   params: Promise<{ shopId: string }>;
@@ -62,12 +62,30 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
   const avgRating = ratingData?.[0]?.avg_rating ?? 0;
   const reviewCount = ratingData?.[0]?.review_count ?? 0;
 
-  // Fetch menu items
-  const { data: menuItems } = await supabase
+  // Fetch menu items with attached reviews
+  const { data: menuItemsRaw } = await supabase
     .from("menu_items")
-    .select("*")
+    .select("*, menu_item_reviews(rating)")
     .eq("shop_id", shopId)
     .order("created_at", { ascending: true });
+
+  const menuItems: MenuItemWithRating[] = (menuItemsRaw || []).map((item: any) => {
+    const itemReviews = Array.isArray(item.menu_item_reviews)
+      ? item.menu_item_reviews
+      : item.menu_item_reviews
+      ? [item.menu_item_reviews]
+      : [];
+    const count = itemReviews.length;
+    const total = itemReviews.reduce(
+      (sum: number, r: { rating: number }) => sum + (r.rating || 0),
+      0
+    );
+    return {
+      ...item,
+      avg_rating: count > 0 ? Number((total / count).toFixed(2)) : 0,
+      review_count: count,
+    };
+  });
 
   // Fetch reviews with profiles and replies
   const { data: reviews } = await supabase
@@ -92,15 +110,15 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
     existingReview = data ?? null;
   }
 
-  // Check if user is a student (only students can review)
+  // Check if user is a student (only active students can review)
   let isStudent = false;
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, status")
       .eq("id", user.id)
       .single();
-    isStudent = profile?.role === "student";
+    isStudent = profile?.role === "student" && profile?.status === "active";
   }
 
   const activeMenuItems = menuItems?.filter((i) => i.status === "active") ?? [];
@@ -110,20 +128,15 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
       {/* Shop Header */}
       <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
         <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 sm:h-64">
-          {shop.image_url ? (
-            <Image
-              src={shop.image_url}
-              alt={shop.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 100%"
-              priority
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <Store className="h-16 w-16 text-gray-300" />
-            </div>
-          )}
+          <SafeImage
+            src={shop.image_url ?? ""}
+            alt={shop.name}
+            fill
+            fallbackType="store"
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 100%"
+            priority
+          />
         </div>
         <div className="p-5 sm:p-6">
           <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">{shop.name}</h1>
@@ -131,7 +144,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
             <p className="mt-2 text-sm text-gray-500">{shop.description}</p>
           )}
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <StarRating rating={Math.round(avgRating)} size="md" />
+            <StarRating rating={avgRating} size="md" />
             <span className="text-lg font-bold text-gray-900">
               {avgRating > 0 ? avgRating.toFixed(1) : "\u2014"}
             </span>
@@ -173,16 +186,24 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
         }}
       />
 
-      {/* Menu Items */}
+      {/* Menu Items with Ratings & Review Modals */}
       {menuItems && menuItems.length > 0 && (
         <section>
-          <h2 className="mb-3 text-sm font-bold text-gray-900">
-            Menu
-            <span className="ml-1.5 text-gray-400 font-normal">({menuItems.length})</span>
-          </h2>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-sm font-bold text-gray-900">
+              Menu Items
+              <span className="ml-1.5 text-gray-400 font-normal">({menuItems.length})</span>
+            </h2>
+            <span className="text-xs text-gray-400">Click any dish to view & write reviews</span>
+          </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {menuItems.map((item) => (
-              <MenuItemCard key={item.id} item={item} />
+              <MenuItemCard
+                key={item.id}
+                item={item}
+                currentUserId={user?.id}
+                isStudent={isStudent}
+              />
             ))}
           </div>
         </section>
@@ -198,7 +219,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
       {/* Reviews */}
       <section>
         <h2 className="mb-3 text-sm font-bold text-gray-900">
-          Reviews
+          Customer Reviews
           <span className="ml-1.5 text-gray-400 font-normal">({reviewCount})</span>
         </h2>
         {reviews && reviews.length > 0 ? (
