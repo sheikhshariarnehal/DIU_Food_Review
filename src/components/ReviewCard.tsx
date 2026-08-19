@@ -53,7 +53,7 @@ export function ReviewCard({ review, showReplyForm, replyForm }: ReviewCardProps
             <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
               Shop Owner Reply
             </p>
-            <span className="ml-auto text-[11px] text-gray-400">
+            <span className="ml-auto text-xs text-gray-500 font-normal">
               {formatDistanceToNow(reply.created_at)}
             </span>
           </div>
@@ -65,7 +65,12 @@ export function ReviewCard({ review, showReplyForm, replyForm }: ReviewCardProps
 
       {/* Reply Form Slot (Only if no reply exists yet) */}
       {showReplyForm && !reply && (
-        <div className="mt-4 ml-6 sm:ml-12">{replyForm}</div>
+        <div className="mt-3.5 ml-6 sm:ml-12 rounded-xl border border-gray-100 bg-gray-50/60 p-3.5">
+          <p className="mb-2 text-xs font-bold text-gray-700 uppercase tracking-wider">
+            Reply as Shop Owner
+          </p>
+          {replyForm}
+        </div>
       )}
     </div>
   );

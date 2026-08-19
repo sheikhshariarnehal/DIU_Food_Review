@@ -31,8 +31,8 @@ export function BottomNav({ navItems }: BottomNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-      <div className="flex items-center justify-around h-16 px-2">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 z-50 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
+      <div className="flex items-center justify-around h-16 px-3">
         {navItems.map((item) => {
           const Icon = iconMap[item.icon];
           const isActive = pathname === item.href;
@@ -40,14 +40,14 @@ export function BottomNav({ navItems }: BottomNavProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-1 min-w-0 px-2 py-1 rounded-lg transition-colors ${
+              className={`flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[44px] px-3 py-1.5 rounded-xl transition-all ${
                 isActive
-                  ? "text-green-600"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-emerald-50 text-emerald-700 font-bold"
+                  : "text-gray-500 hover:text-gray-900 active:scale-95"
               }`}
             >
-              <Icon className="w-5 h-5" />
-              <span className="text-[10px] font-medium truncate">
+              <Icon className="w-5 h-5 shrink-0" />
+              <span className="text-xs tracking-tight truncate">
                 {item.label}
               </span>
             </Link>

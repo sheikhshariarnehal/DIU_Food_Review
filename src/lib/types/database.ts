@@ -64,6 +64,8 @@ export interface MenuItemReview {
   user_id: string;
   rating: number;
   body: string;
+  reply?: string | null;
+  reply_created_at?: string | null;
   created_at: string;
 }
 
