@@ -302,7 +302,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
       {/* Stats */}
       <StatsBar entries={entries} />
 
-      {/* Podium */}
+      {/* Podium — only when default rank order with no search */}
       {showPodium && top3.length >= 3 && (
         <div className="grid grid-cols-3 items-end gap-3 sm:gap-4">
           {/* 2nd place on the left */}
@@ -505,6 +505,7 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
   );
 }
 
+/* ----------- Rank badge helper ----------- */
 function RankBadge({ rank }: { rank: number }) {
   const styles: Record<number, string> = {
     1: "bg-amber-50 text-amber-700",
@@ -522,6 +523,7 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
+/* ----------- Sort button helper ----------- */
 function SortButton({
   active,
   dir,

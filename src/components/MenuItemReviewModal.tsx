@@ -312,7 +312,7 @@ export function MenuItemReviewModal({
 
         {/* Modal Body */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5 min-h-0">
-          {/* Average Rating Score Card */}
+          {/* Average Rating Score Card (Polished & Spacious) */}
           <div className="flex flex-row items-center justify-between rounded-2xl border border-amber-200/80 bg-amber-50/70 p-4 shadow-2xs">
             <div className="flex items-center gap-3.5 min-w-0">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-100 font-black text-amber-900 text-xl shadow-2xs">
@@ -339,7 +339,7 @@ export function MenuItemReviewModal({
             )}
           </div>
 
-          {/* Student Review Form */}
+          {/* Student Review Form (if active student logged in) */}
           {isStudent && (
             <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4 sm:p-5 space-y-3 shadow-2xs">
               <div className="flex items-center justify-between">
@@ -398,7 +398,7 @@ export function MenuItemReviewModal({
             </div>
           )}
 
-          {/* List of Reviews with Owner Replies */}
+          {/* List of Reviews with Shop Owner Replies */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-gray-100 pb-2">
               <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
@@ -455,7 +455,7 @@ export function MenuItemReviewModal({
                       </p>
                     )}
 
-                    {/* Owner Reply Thread */}
+                    {/* Shop Owner Reply Thread Display */}
                     {rev.reply && (
                       <div className="mt-3 rounded-2xl border border-emerald-100/90 bg-emerald-50/50 p-3.5 shadow-2xs">
                         <div className="flex items-center justify-between gap-2 mb-1.5">
@@ -500,7 +500,7 @@ export function MenuItemReviewModal({
                       </div>
                     )}
 
-                    {/* Owner Reply Form */}
+                    {/* Owner Reply Action Form */}
                     {isOwner && (!rev.reply || replyingReviewId === rev.id) && (
                       <div className="mt-3 rounded-2xl border border-gray-100 bg-gray-50/60 p-3.5">
                         {replyingReviewId === rev.id ? (

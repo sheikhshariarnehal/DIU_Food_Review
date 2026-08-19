@@ -132,7 +132,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
 
   return (
     <div className="w-full space-y-6 pb-12">
-      {/* Breadcrumb Navigation */}
+      {/* ── Breadcrumb Navigation ── */}
       <div className="flex items-center gap-2">
         <Link
           href="/shops"
@@ -143,7 +143,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
         </Link>
       </div>
 
-      {/* Hero Stall Card */}
+      {/* ── Hero Stall Card (Distilled Layout) ── */}
       <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xs">
         <div className="relative aspect-[21/9] w-full min-h-[180px] sm:min-h-[240px] overflow-hidden bg-gray-100">
           <SafeImage
@@ -156,7 +156,7 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
+          
           <div className="absolute bottom-4 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 text-white">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div className="space-y-1">
@@ -239,9 +239,9 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
         }}
       />
 
-      {/* 2-Column Layout: Menu (Left) & Reviews (Right) */}
+      {/* ── 2-Column Responsive Layout: Menu (Left 3 cols) & Reviews (Right 2 cols) ── */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-        {/* Left Column: Menu Items */}
+        {/* Left Column: Menu Items Catalog */}
         <section className="space-y-4 lg:col-span-3">
           <div className="flex items-center justify-between border-b border-gray-100 pb-3">
             <div>
@@ -281,14 +281,16 @@ export default async function ShopDetailPage({ params }: ShopDetailPageProps) {
           )}
         </section>
 
-        {/* Right Column: Student Reviews */}
+        {/* Right Column: Student Reviews & Submission */}
         <section className="space-y-5 lg:col-span-2">
+          {/* Review Submission Form (For Active Students) */}
           {isStudent && (
             <div>
               <ReviewForm shopId={shopId} existingReview={existingReview} />
             </div>
           )}
 
+          {/* Customer Reviews Stream */}
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div>

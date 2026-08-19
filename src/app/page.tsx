@@ -312,7 +312,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Features Section */}
+      {/* ── Features Section (Distilled to 4 Pillars) ── */}
       <section className="relative py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <BlurFade delay={0.1} inView>
@@ -355,7 +355,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* ── How It Works Section ── */}
       <section className="relative bg-gray-50/70 py-16 sm:py-24 border-y border-gray-100">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <BlurFade delay={0.1} inView>
@@ -373,10 +373,12 @@ export default function HomePage() {
             {steps.map((step, i) => (
               <BlurFade key={step.step} delay={0.15 + i * 0.15} inView>
                 <div className="relative flex flex-col items-center text-center px-3">
+                  {/* Horizontal connector line on desktop */}
                   {i < steps.length - 1 && (
                     <div className="absolute top-8 left-[calc(50%+2rem)] right-0 hidden h-px bg-gradient-to-r from-emerald-300 to-emerald-100 lg:block" />
                   )}
 
+                  {/* Step Icon Badge */}
                   <div className="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white shadow-md shadow-emerald-100 border border-emerald-100">
                     <step.icon className="h-7 w-7 text-emerald-600" />
                     <span className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-xs font-black text-white shadow-sm ring-2 ring-white">
@@ -397,7 +399,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Marquee */}
+      {/* ── Testimonials Marquee ── */}
       <section className="relative py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <BlurFade delay={0.1} inView>
@@ -423,7 +425,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Bold Call to Action */}
+      {/* ── Bold Call to Action ── */}
       <section className="relative py-16 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <BlurFade delay={0.1} inView>
@@ -475,7 +477,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer className="border-t border-gray-100 bg-gray-50/80">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
