@@ -113,7 +113,7 @@ export function ReviewForm({ shopId, existingReview }: ReviewFormProps) {
         <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
           {existingReview ? "Edit Your Review" : "Write a Stall Review"}
         </h3>
-        {existingReview && (\
+        {existingReview && (
           <button
             type="button"
             onClick={() => { setIsEditing(false); setRating(existingReview.rating); setBody(existingReview.body); }}
@@ -157,9 +157,9 @@ export function ReviewForm({ shopId, existingReview }: ReviewFormProps) {
         disabled={loading}
         className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-2xs transition-all hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
-        {loading ? (\
+        {loading ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
-        ) : (\
+        ) : (
           <Send className="h-3.5 w-3.5" />
         )}
         <span>{loading ? "Saving..." : existingReview ? "Save Changes" : "Submit Stall Review"}</span>
