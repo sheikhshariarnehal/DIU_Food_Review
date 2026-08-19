@@ -156,7 +156,7 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
 
   return (
     <div className="space-y-6 pb-10">
-      {/* Header */}
+      {/* ── Header ── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
@@ -175,7 +175,7 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
         </Button>
       </div>
 
-      {/* Search & Filter Controls */}
+      {/* ── Search & Filter Controls ── */}
       {items.length > 0 && (
         <div className="flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-2xs sm:flex-row sm:items-center">
           <div className="relative flex-1">
@@ -219,7 +219,7 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
                 >
                   <span>{tab.label}</span>
                   <span
-                    className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${
+                    className={`rounded-full px-1.5 py-0.2 text-xs font-bold ${
                       isActive ? "bg-white/20 text-white" : tab.badge || "bg-gray-200 text-gray-700"
                     }`}
                   >
@@ -232,7 +232,7 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
         </div>
       )}
 
-      {/* Items Grid */}
+      {/* ── Items Grid ── */}
       {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 py-20 px-6 text-center">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-2xs text-gray-400">
@@ -282,7 +282,7 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
         </div>
       )}
 
-      {/* Add / Edit Dialog */}
+      {/* ── Add / Edit Dialog ── */}
       <Dialog open={dialogOpen} onOpenChange={(o) => { if (!o) closeDialog(); }}>
         <DialogContent
           key={editItem?.id ?? "new"}
@@ -395,7 +395,7 @@ export default function MenuClient({ shopId, initialItems }: MenuClientProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
+      {/* ── Delete Confirmation Dialog ── */}
       <AlertDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(o) => { if (!o) setDeleteTarget(null); }}

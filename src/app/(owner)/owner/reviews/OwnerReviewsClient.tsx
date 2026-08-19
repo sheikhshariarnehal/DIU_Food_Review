@@ -86,7 +86,7 @@ export function OwnerReviewsClient({ shopName, reviews }: OwnerReviewsClientProp
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* ── Header ── */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
@@ -113,7 +113,7 @@ export function OwnerReviewsClient({ shopName, reviews }: OwnerReviewsClientProp
         )}
       </div>
 
-      {/* Search & Filter Controls */}
+      {/* ── Search & Filter Controls ── */}
       <div className="flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-2xs sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -143,7 +143,7 @@ export function OwnerReviewsClient({ shopName, reviews }: OwnerReviewsClientProp
                 <span>{tab.label}</span>
                 {typeof tab.count === "number" && (
                   <span
-                    className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${getBadgeClass(tab, isActive)}`}
+                    className={`rounded-full px-1.5 py-0.2 text-xs font-bold ${getBadgeClass(tab, isActive)}`}
                   >
                     {tab.count}
                   </span>
@@ -154,7 +154,7 @@ export function OwnerReviewsClient({ shopName, reviews }: OwnerReviewsClientProp
         </div>
       </div>
 
-      {/* Reviews Stream */}
+      {/* ── Reviews Stream ── */}
       {filteredReviews.length === 0 ? (
         <div className="rounded-2xl border border-gray-100 bg-white p-12 text-center shadow-2xs">
           <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-50 text-gray-300">

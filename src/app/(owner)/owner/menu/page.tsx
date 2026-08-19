@@ -67,7 +67,7 @@ export default async function OwnerMenuPage() {
   });
 
   return (
-    <div className="w-full max-w-6xl mx-auto pb-12">
+    <div className="w-full pb-12">
       <MenuClient shopId={shop.id} initialItems={menuItems ?? []} />
     </div>
   );
