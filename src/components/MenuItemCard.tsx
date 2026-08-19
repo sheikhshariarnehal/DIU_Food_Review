@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { MenuItemWithRating } from "@/lib/types/database";
 import { StarRating } from "./StarRating";
 import { SafeImage } from "./ui/SafeImage";
@@ -30,6 +30,7 @@ interface MenuItemCardProps {
   onDelete?: (item: MenuItemWithRating) => void;
   currentUserId?: string | null;
   isStudent?: boolean;
+  isOwner?: boolean;
   onReviewSubmitted?: () => void;
 }
 
@@ -41,14 +42,20 @@ export function MenuItemCard({
   onDelete,
   currentUserId,
   isStudent = false,
+  isOwner = false,
   onReviewSubmitted,
 }: MenuItemCardProps) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [avgRating, setAvgRating] = useState(item.avg_rating ?? 0);
+  const [reviewCount, setReviewCount] = useState(item.review_count ?? 0);
   const isActive = item.status === "active";
-  const avgRating = item.avg_rating ?? 0;
-  const reviewCount = item.review_count ?? 0;
 
-  return (
+  useEffect(() => {
+    setAvgRating(item.avg_rating ?? 0);
+    setReviewCount(item.review_count ?? 0);
+  }, [item.avg_rating, item.review_count]);
+
+  return (\
     <>
       <Card className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white pt-0 shadow-sm transition-all duration-300 hover:shadow-md hover:border-zinc-300">
         {/* Image */}
@@ -67,8 +74,8 @@ export function MenuItemCard({
             <Badge
               className={
                 isActive
-                  ? "bg-emerald-500 text-white text-[10px] font-semibold px-2 py-0.5 shadow-sm"
-                  : "bg-amber-500 text-white text-[10px] font-semibold px-2 py-0.5 shadow-sm"
+                  ? "bg-emerald-500 text-white text-xs font-semibold px-2 py-0.5 shadow-sm"
+                  : "bg-amber-500 text-white text-xs font-semibold px-2 py-0.5 shadow-sm"
               }
             >
               {isActive ? "Available" : "Stock Out"}
@@ -83,8 +90,8 @@ export function MenuItemCard({
           >
             <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
             <span>{avgRating > 0 ? avgRating.toFixed(1) : "New"}</span>
-            {reviewCount > 0 && (
-              <span className="text-[10px] text-zinc-300 font-normal">
+            {reviewCount > 0 && (\
+              <span className="text-xs text-zinc-300 font-normal">
                 ({reviewCount})
               </span>
             )}
@@ -100,11 +107,11 @@ export function MenuItemCard({
               </h4>
             </div>
 
-            {item.description ? (
+            {item.description ? (\
               <p className="mt-1 text-xs text-zinc-500 line-clamp-2 leading-relaxed">
                 {item.description}
               </p>
-            ) : (
+            ) : (\
               <p className="mt-1 text-xs text-zinc-300 italic">No description provided</p>
             )}
           </div>
@@ -114,20 +121,20 @@ export function MenuItemCard({
               ৳{Number(item.price).toFixed(0)}
             </span>
 
-            {editable ? (
+            {editable ? (\
               <div className="flex items-center gap-1">
                 <Tooltip>
                   <TooltipTrigger
                     onClick={() => onToggleStatus?.(item)}
-                    className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${
+                    className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${\
                       isActive
                         ? "text-amber-500 hover:bg-amber-50 hover:text-amber-700"
                         : "text-emerald-500 hover:bg-emerald-50 hover:text-emerald-700"
                     }`}
                   >
-                    {isActive ? (
+                    {isActive ? (\
                       <Archive className="h-3.5 w-3.5" />
-                    ) : (
+                    ) : (\
                       <ArchiveRestore className="h-3.5 w-3.5" />
                     )}
                   </TooltipTrigger>
@@ -151,7 +158,7 @@ export function MenuItemCard({
                 <Tooltip>
                   <TooltipTrigger
                     onClick={() => onDelete?.(item)}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition-colors hover:bg-rose-50 hover:text-rose-600 cursor-pointer"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-rose-500/80 transition-colors hover:bg-rose-50 hover:text-rose-700 cursor-pointer"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </TooltipTrigger>
@@ -160,7 +167,7 @@ export function MenuItemCard({
                   </TooltipContent>
                 </Tooltip>
               </div>
-            ) : (
+            ) : (\
               <button
                 type="button"
                 onClick={() => setModalOpen(true)}
@@ -181,7 +188,12 @@ export function MenuItemCard({
         onOpenChange={setModalOpen}
         currentUserId={currentUserId}
         isStudent={isStudent}
+        isOwner={isOwner || editable}
         onReviewSubmitted={onReviewSubmitted}
+        onRatingUpdated={(avg, count) => {
+          setAvgRating(avg);
+          setReviewCount(count);
+        }}
       />
     </>
   );
