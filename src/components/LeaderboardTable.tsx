@@ -505,7 +505,6 @@ export function LeaderboardTable({ entries }: LeaderboardTableProps) {
   );
 }
 
-/* ----------- Rank badge helper ----------- */
 function RankBadge({ rank }: { rank: number }) {
   const styles: Record<number, string> = {
     1: "bg-amber-50 text-amber-700",
@@ -523,7 +522,6 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
-/* ----------- Sort button helper ----------- */
 function SortButton({
   active,
   dir,
